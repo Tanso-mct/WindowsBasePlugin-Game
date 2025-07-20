@@ -169,6 +169,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_fbx_loader\wbp_fbx_loader.vcxproj">
+      <Project>{7b83c86d-786b-4217-be75-81ce2cdce58e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_identity\wbp_identity.vcxproj">
       <Project>{da63da4a-8cf7-4528-8224-7298bb13e8dd}</Project>
     </ProjectReference>

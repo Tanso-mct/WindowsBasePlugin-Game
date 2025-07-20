@@ -69,5 +69,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "IFBX"
+    ]
 }
