@@ -169,6 +169,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_identity\wbp_identity.vcxproj">
+      <Project>{da63da4a-8cf7-4528-8224-7298bb13e8dd}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_transform\wbp_transform.vcxproj">
       <Project>{bc69514a-7533-45f3-982c-0f561b8e83ae}</Project>
     </ProjectReference>
