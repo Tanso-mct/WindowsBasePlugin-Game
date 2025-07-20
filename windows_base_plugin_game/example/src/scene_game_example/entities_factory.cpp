@@ -6,6 +6,9 @@
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
 
+#include "wbp_identity/plugin.h"
+#pragma comment(lib, "wbp_identity.lib")
+
 void example::GameExampleEntitiesFactory::Create
 (
     wb::IAssetContainer &assetCont, 
@@ -14,7 +17,7 @@ void example::GameExampleEntitiesFactory::Create
     wb::IEntityIDView &entityIDView
 ) const
 {
-#ifdef EXAMPLE_MODE_TRANSFORM
+#if defined(EXAMPLE_MODE_TRANSFORM)
 
     // Create a root entity
     std::unique_ptr<wb::IOptionalValue> rootEntityID = nullptr;
@@ -133,8 +136,48 @@ void example::GameExampleEntitiesFactory::Create
             "Child B Entity ID: " + std::to_string((*childBEntityID)()),
             "Grandchild Entity ID: " + std::to_string((*grandChildEntityID)()),
             "",
-            "Press Space to output the current transform of the entities.",
-            "Press W, A, S, D to move the root entity."
+            "Press Space to output the current transform of the entities."
+            "Press W, A, S, D to move the root entity.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_IDENTITY)
+
+    // Create a entity which has IdentityComponent
+    std::unique_ptr<wb::IOptionalValue> entityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        entityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+    }
+
+    // Initialize the entity with IdentityComponent
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*entityIDView(0).front());
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+
+        identity->SetName("Example Entity");
+        identity->SetTag(1);
+        identity->SetLayer(2);
+        identity->SetActiveSelf(true);
+    }
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game]",
+            "This example demonstrates the IdentityComponent.",
+            "An entity with IdentityComponent has been created.",
+            "It has a name, tag, layer, and active state.",
+            "",
+            "Entity ID: " + std::to_string((*entityID)()),
+            "",
+            "Press Space to output the identity information of the entity."
         });
         wb::ConsoleLog(msg);
     }

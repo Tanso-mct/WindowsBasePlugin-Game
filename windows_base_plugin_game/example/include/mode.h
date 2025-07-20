@@ -1,3 +1,9 @@
 ﻿#pragma once
 
-#define EXAMPLE_MODE_TRANSFORM
+/***********************************************************************************************************************
+ * Mode definitions
+ * Must be defined only one mode
+/**********************************************************************************************************************/
+
+// #define EXAMPLE_MODE_TRANSFORM
+#define EXAMPLE_MODE_IDENTITY

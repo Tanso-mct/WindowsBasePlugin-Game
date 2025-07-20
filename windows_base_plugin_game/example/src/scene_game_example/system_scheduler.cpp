@@ -6,13 +6,16 @@
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
 
+#include "wbp_identity/plugin.h"
+#pragma comment(lib, "wbp_identity.lib")
+
 using namespace DirectX;
 
 void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCont, wb::SystemArgument &args)
 {
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
 
-#ifdef EXAMPLE_MODE_TRANSFORM
+#if defined(EXAMPLE_MODE_TRANSFORM)
 
     // Get containers to use
     wb::IWindowContainer &windowContainer = args.containerStorage_.GetContainer<wb::IWindowContainer>();
@@ -101,6 +104,47 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
             });
             wb::ConsoleLog(msg);
 
+        }
+    }
+
+#elif defined(EXAMPLE_MODE_IDENTITY)
+
+    // Get containers to use
+    wb::IWindowContainer &windowContainer = args.containerStorage_.GetContainer<wb::IWindowContainer>();
+    wb::IMonitorContainer &monitorContainer = args.containerStorage_.GetContainer<wb::IMonitorContainer>();
+    wb::IAssetContainer &assetContainer = args.containerStorage_.GetContainer<wb::IAssetContainer>();
+
+    // Get the window facade for the current window
+    wb::IWindowFacade &window = windowContainer.Get(args.belongWindowID_);
+
+    // Get the keyboard and mouse monitors
+    wb::IKeyboardMonitor *keyboardMonitor = nullptr;
+    wb::IMouseMonitor *mouseMonitor = nullptr;
+    for (const size_t &monitorID : window.GetMonitorIDs())
+    {
+        wb::IMonitor &monitor = monitorContainer.Get(monitorID);
+        if (keyboardMonitor == nullptr) keyboardMonitor = wb::As<wb::IKeyboardMonitor>(&monitor);
+        if (mouseMonitor == nullptr) mouseMonitor = wb::As<wb::IMouseMonitor>(&monitor);
+    }
+
+    for (const std::unique_ptr<wb::IOptionalValue> &id : (args.entityIDView_)(wbp_identity::IdentityComponentID()))
+    {
+        wb::IEntity *entity = args.entityContainer_.PtrGet(*id);
+        if (entity == nullptr) continue; // Skip if entity is null
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), args.componentContainer_);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+
+        if (keyboardMonitor != nullptr && keyboardMonitor->GetKeyDown(wb::KeyCode::Space))
+        {
+            std::string msg = wb::CreateMessage
+            ({
+                "Name: " + std::string(identity->GetName()),
+                "Tag: " + std::to_string(identity->GetTag()),
+                "Layer: " + std::to_string(identity->GetLayer()),
+                "Active Self: " + std::to_string(identity->IsActiveSelf())
+            });
+            wb::ConsoleLog(msg);
         }
     }
 
