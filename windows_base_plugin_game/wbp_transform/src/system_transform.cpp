@@ -56,8 +56,8 @@ void wbp_transform::TransformSystem::Update(const wb::SystemArgument &args)
         wb::IEntity *entity = args.entityContainer_.PtrGet(*id);
         if (entity == nullptr) continue; // Skip if entity is null
 
-        wb::IComponent *component = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
-        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(component);
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
 
         transform->CleanNotExistEntities(args.entityContainer_, args.componentContainer_);
     }
@@ -68,8 +68,8 @@ void wbp_transform::TransformSystem::Update(const wb::SystemArgument &args)
         wb::IEntity *entity = args.entityContainer_.PtrGet(*id);
         if (entity == nullptr) continue; // Skip if entity is null
 
-        wb::IComponent *component = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
-        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(component);
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
 
         // Skip if the Entity is not a root Entity
         if (transform->GetParent(args.entityContainer_) != nullptr) continue;
