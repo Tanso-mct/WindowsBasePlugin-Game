@@ -92,6 +92,9 @@
     <ClInclude Include="include\window_game_example\window.h">
       <Filter>ヘッダー ファイル\window_game_example</Filter>
     </ClInclude>
+    <ClInclude Include="include\mode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

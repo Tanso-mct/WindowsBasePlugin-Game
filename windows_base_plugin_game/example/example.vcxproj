@@ -153,6 +153,7 @@
     <ClCompile Include="src\window_game_example\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\mode.h" />
     <ClInclude Include="include\scene_game_example\asset_group.h" />
     <ClInclude Include="include\scene_game_example\entities_factory.h" />
     <ClInclude Include="include\scene_game_example\scene.h" />
@@ -168,6 +169,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_transform\wbp_transform.vcxproj">
+      <Project>{bc69514a-7533-45f3-982c-0f561b8e83ae}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\windows_base\windows_base.vcxproj">
       <Project>{060ef2ce-203c-4ecc-bed7-5d4ffdb963fc}</Project>
     </ProjectReference>
