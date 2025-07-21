@@ -14,6 +14,6 @@ const size_t &wbp_identity::IdentityComponent::GetID() const
 
 namespace wbp_identity
 {
-    WB_REGISTER_COMPONENT(IdentityComponent, IdentityComponentID());
+    WB_REGISTER_COMPONENT(IdentityComponentID(), IdentityComponent);
 
 } // namespace wbp_identity

@@ -2,12 +2,16 @@
 #include "example/include/scene_game_example/entities_factory.h"
 
 #include "example/include/mode.h"
+#include "example/include/scene_game_example/asset_group.h"
 
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
 
 #include "wbp_identity/plugin.h"
 #pragma comment(lib, "wbp_identity.lib")
+
+#include "wbp_render/plugin.h"
+#pragma comment(lib, "wbp_render.lib")
 
 void example::GameExampleEntitiesFactory::Create
 (
@@ -182,7 +186,7 @@ void example::GameExampleEntitiesFactory::Create
         wb::ConsoleLog(msg);
     }
 
-elif defined(EXAMPLE_MODE_FBX_LOADER)
+#elif defined(EXAMPLE_MODE_FBX_LOADER)
 
     // Output the explanation
     {
@@ -205,6 +209,75 @@ elif defined(EXAMPLE_MODE_FBX_LOADER)
             "This example demonstrates the ModelAsset loading.",
             "You can see the loaded data to set break points in the debugger.",
             "The file you need to set break points is 'wbp_fbx_loader/src/asset_factory_model.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_RENDER)
+    
+    // Create a camera entity
+    std::unique_ptr<wb::IOptionalValue> cameraEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        cameraEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::CameraComponentID(), componentCont);
+    }
+
+    // Initialize the camera entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*cameraEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Main Camera");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 8.0f, -25.0f));
+
+        wb::IComponent *cameraComponent = entity->GetComponent(wbp_render::CameraComponentID(), componentCont);
+        wbp_render::ICameraComponent *camera = wb::As<wbp_render::ICameraComponent>(cameraComponent);
+        camera->SetFarZ(10000.0f);
+    }
+
+    // Create basic humanoid model entity
+    std::unique_ptr<wb::IOptionalValue> modelEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        modelEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::MeshRendererComponentID(), componentCont);
+    }
+
+    // Initialize the model entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*modelEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Basic Humanoid Model");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalScale(DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+        meshRenderer->SetModelAssetID(example::CharacterModelAssetID());
+    }
+
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_render]",
+            "This example demonstrates the Render.",
         });
         wb::ConsoleLog(msg);
     }

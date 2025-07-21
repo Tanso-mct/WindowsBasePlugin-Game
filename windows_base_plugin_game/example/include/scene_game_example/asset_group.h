@@ -21,9 +21,9 @@ namespace example
 
     const size_t &MockAssetID();
 
-#elif defined(EXAMPLE_MODE_MODEL)
+#elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
-    const size_t &BasicHumanoidModelAssetID();
+    const size_t &CharacterModelAssetID();
 
 #endif
 

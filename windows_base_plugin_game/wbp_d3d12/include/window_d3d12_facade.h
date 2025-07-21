@@ -10,7 +10,7 @@
 
 namespace wbp_d3d12
 {
-    class WBP_D3D12_API WindowD3D12Facade : public wb::DefaultWindowFacade, public ID3D12WindowFacade
+    class WBP_D3D12_API WindowD3D12Facade : public wb::DefaultWindowFacade, public IWindowD3D12Facade
     {
     private:
         const UINT RENDER_TARGET_COUNT;
@@ -38,7 +38,7 @@ namespace wbp_d3d12
         virtual void Resized() override;
 
         /***************************************************************************************************************
-         * ID3D12WindowFacade implementation
+         * IWindowD3D12Facade implementation
         /**************************************************************************************************************/
 
         virtual void SetSwapChainContext(std::unique_ptr<ISwapChainContext> swapChainContext) override;
@@ -46,14 +46,20 @@ namespace wbp_d3d12
         virtual void SetFenceContext(std::unique_ptr<IFenceContext> fenceContext) override;
 
         virtual void ResetCommand(ID3D12PipelineState *pipelineState) override;
+        virtual void ResetCommand(ID3D12GraphicsCommandList *commandList, ID3D12PipelineState *pipelineState) override;
         virtual void CloseCommand() override;
 
         virtual void SetBarrierToRenderTarget() override;
+        virtual void SetBarrierToRenderTarget(ID3D12GraphicsCommandList *commandList) override;
         virtual void SetBarrierToPresent() override;
+        virtual void SetBarrierToPresent(ID3D12GraphicsCommandList *commandList) override;
+
         virtual void SetRenderTarget(UINT depthStencilIndex) override;
+        virtual void SetRenderTarget(UINT depthStencilIndex, ID3D12GraphicsCommandList *commandList) override;
 
         virtual ID3D12CommandAllocator *GetCommandAllocator() override;
         virtual ID3D12GraphicsCommandList *GetCommandList() override;
+        virtual const size_t &GetCurrentFrameIndex() const override;
 
         virtual void ClearViews(const float (&clearColor)[4], UINT depthStencilIndex) override;
         virtual void Present() override;

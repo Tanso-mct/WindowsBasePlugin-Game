@@ -573,6 +573,12 @@ void wbp_d3d12::WindowD3D12Facade::Resized()
         renderTargetContext_->GetScissorRect(),
         context_->ClientWidth(), context_->ClientHeight()
     );
+
+    /*******************************************************************************************************************
+     * Reset the resize flag
+    /******************************************************************************************************************/
+
+    context_->NeedsResize() = false;
 }
 
 void wbp_d3d12::WindowD3D12Facade::SetSwapChainContext(std::unique_ptr<ISwapChainContext> swapChainContext)
@@ -703,6 +709,29 @@ void wbp_d3d12::WindowD3D12Facade::ResetCommand(ID3D12PipelineState *pipelineSta
     );
 }
 
+void wbp_d3d12::WindowD3D12Facade::ResetCommand(ID3D12GraphicsCommandList *commandList, ID3D12PipelineState *pipelineState)
+{
+    if (!context_->IsCreated())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {"Window is not created."}
+        );
+
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WINDOWS_BASE", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    wbp_d3d12::ResetCommand
+    (
+        commandList,
+        renderTargetContext_->GetCommandAllocators()[swapChainContext_->GetFrameIndex()],
+        pipelineState
+    );
+}
+
 void wbp_d3d12::WindowD3D12Facade::CloseCommand()
 {
     if (!context_->IsCreated())
@@ -744,6 +773,29 @@ void wbp_d3d12::WindowD3D12Facade::SetBarrierToRenderTarget()
     );
 }
 
+void wbp_d3d12::WindowD3D12Facade::SetBarrierToRenderTarget(ID3D12GraphicsCommandList *commandList)
+{
+    if (!context_->IsCreated())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {"Window is not created."}
+        );
+
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WINDOWS_BASE", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    wbp_d3d12::SetBarrier
+    (
+        commandList,
+        renderTargetContext_->GetRenderTargets()[swapChainContext_->GetFrameIndex()],
+        D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET
+    );
+}
+
 void wbp_d3d12::WindowD3D12Facade::SetBarrierToPresent()
 {
     if (!context_->IsCreated())
@@ -762,6 +814,29 @@ void wbp_d3d12::WindowD3D12Facade::SetBarrierToPresent()
     wbp_d3d12::SetBarrier
     (
         renderTargetContext_->GetCommandLists()[swapChainContext_->GetFrameIndex()],
+        renderTargetContext_->GetRenderTargets()[swapChainContext_->GetFrameIndex()],
+        D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT
+    );
+}
+
+void wbp_d3d12::WindowD3D12Facade::SetBarrierToPresent(ID3D12GraphicsCommandList *commandList)
+{
+    if (!context_->IsCreated())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {"Window is not created."}
+        );
+
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WINDOWS_BASE", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    wbp_d3d12::SetBarrier
+    (
+        commandList,
         renderTargetContext_->GetRenderTargets()[swapChainContext_->GetFrameIndex()],
         D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT
     );
@@ -802,6 +877,34 @@ void wbp_d3d12::WindowD3D12Facade::SetRenderTarget(UINT depthStencilIndex)
     );
 }
 
+void wbp_d3d12::WindowD3D12Facade::SetRenderTarget(UINT depthStencilIndex, ID3D12GraphicsCommandList *commandList)
+{
+    if (!context_->IsCreated())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {"Window is not created."}
+        );
+
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WINDOWS_BASE", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    wbp_d3d12::SetRenderTargets
+    (
+        commandList,
+        renderTargetContext_->GetRtvDescriptorHeap(),
+        swapChainContext_->GetFrameIndex(), renderTargetContext_->GetRtvDescriptorSize(),
+        renderTargetContext_->GetDsvDescriptorHeap(),
+        depthStencilIndex, renderTargetContext_->GetDsvDescriptorSize()
+    );
+
+    commandList->RSSetViewports(1, &renderTargetContext_->GetViewPort());
+    commandList->RSSetScissorRects(1, &renderTargetContext_->GetScissorRect());
+}
+
 ID3D12CommandAllocator *wbp_d3d12::WindowD3D12Facade::GetCommandAllocator()
 {
     if (!context_->IsCreated())
@@ -836,6 +939,24 @@ ID3D12GraphicsCommandList *wbp_d3d12::WindowD3D12Facade::GetCommandList()
     }
 
     return renderTargetContext_->GetCommandLists()[swapChainContext_->GetFrameIndex()].Get();
+}
+
+const size_t &wbp_d3d12::WindowD3D12Facade::GetCurrentFrameIndex() const
+{
+    if (!context_->IsCreated())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {"Window is not created."}
+        );
+
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WINDOWS_BASE", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    return swapChainContext_->GetFrameIndex();
 }
 
 void wbp_d3d12::WindowD3D12Facade::ClearViews(const float (&clearColor)[4], UINT depthStencilIndex)

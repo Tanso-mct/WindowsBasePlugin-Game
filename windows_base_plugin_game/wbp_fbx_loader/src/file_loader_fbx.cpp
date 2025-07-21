@@ -6,6 +6,8 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+#include <array>
+
 #include <fbxsdk.h>
 #pragma comment(lib, "libfbxsdk.lib")
 using namespace fbxsdk;
@@ -222,13 +224,16 @@ std::unique_ptr<wb::IFileData> wbp_fbx_loader::FBXFileLoader::Load(std::string_v
         wb::ThrowRuntimeError(err);
     }
 
+    FbxGeometryConverter converter(fbxManager);
+    converter.Triangulate(fbxScene, true);
+
+    int animCount = fbxImporter->GetAnimStackCount();
+
     FbxAxisSystem dx = FbxAxisSystem::DirectX;
     if (fbxScene->GetGlobalSettings().GetAxisSystem() != dx)
     {
         dx.DeepConvertScene(fbxScene);
     }
-
-    int animCount = fbxImporter->GetAnimStackCount();
 
     fbxNode = fbxScene->GetRootNode();
     FbxNode* rootNode = fbxScene->GetRootNode();
