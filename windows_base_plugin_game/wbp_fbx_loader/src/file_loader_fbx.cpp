@@ -228,6 +228,8 @@ std::unique_ptr<wb::IFileData> wbp_fbx_loader::FBXFileLoader::Load(std::string_v
         dx.DeepConvertScene(fbxScene);
     }
 
+    int animCount = fbxImporter->GetAnimStackCount();
+
     fbxNode = fbxScene->GetRootNode();
     FbxNode* rootNode = fbxScene->GetRootNode();
     if (rootNode)

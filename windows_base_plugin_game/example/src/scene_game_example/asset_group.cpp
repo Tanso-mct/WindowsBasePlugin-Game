@@ -25,7 +25,7 @@ const size_t &example::MockAssetID()
 
 namespace example
 {
-    WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), "../resources/models/");
+    WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), "../resources/example/basic_humanoid.fbx");
 
 } // namespace example
 
@@ -33,5 +33,9 @@ namespace example
 
 example::GameExampleAssetGroup::GameExampleAssetGroup()
 {
+#if defined(EXAMPLE_MODE_FBX_LOADER)
+
+    AddAssetID(example::MockAssetID());
     
+#endif
 }
