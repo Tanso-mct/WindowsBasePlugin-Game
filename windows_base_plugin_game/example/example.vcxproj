@@ -138,6 +138,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\entry.cpp" />
+    <ClCompile Include="src\feature\component_controller.cpp" />
+    <ClCompile Include="src\feature\system_controller.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -153,6 +155,8 @@
     <ClCompile Include="src\window_game_example\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\feature\component_controller.h" />
+    <ClInclude Include="include\feature\system_controller.h" />
     <ClInclude Include="include\mode.h" />
     <ClInclude Include="include\scene_game_example\asset_group.h" />
     <ClInclude Include="include\scene_game_example\entities_factory.h" />

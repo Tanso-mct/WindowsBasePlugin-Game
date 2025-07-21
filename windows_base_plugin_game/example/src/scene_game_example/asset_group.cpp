@@ -67,6 +67,18 @@ const size_t &example::CharacterColliderShapeAssetID()
     return id;
 }
 
+const size_t &example::FieldModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::FieldColliderShapeAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
 namespace example
 {
     WB_REGISTER_ASSET
@@ -79,6 +91,18 @@ namespace example
     (
         CharacterColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
         "../resources/example/character_collider_shape.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        FieldModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/field.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        FieldColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/field_collider_shape.fbx"
     );
 
 } // namespace example
@@ -101,6 +125,8 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
 
     AddAssetID(example::CharacterModelAssetID());
     AddAssetID(example::CharacterColliderShapeAssetID());
+    AddAssetID(example::FieldModelAssetID());
+    AddAssetID(example::FieldColliderShapeAssetID());
 
 #endif
 }

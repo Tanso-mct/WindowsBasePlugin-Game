@@ -106,6 +106,12 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         wb::IComponent *runnerTransformComponent = runnerEntity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
         wbp_transform::ITransformComponent *runnerTransform = wb::As<wbp_transform::ITransformComponent>(runnerTransformComponent);
 
+        // Create total AABB from the runner's box collider
+        wbp_collision::PrimitiveAABB totalAABB = wbp_collision::CreateAABBFromAABBs
+        (
+            runnerBoxCollider->GetAABBs(assetContainer), runnerTransform->GetWorldMatrixWithoutRot()
+        );
+
         // Create movement vector based on runnerTransform
         DirectX::XMFLOAT3 movementVec = 
         {
@@ -115,9 +121,11 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         };
 
         // Create AABB from movement vector
-        wbp_collision::PrimitiveAABB movementAABB = wbp_collision::CreateAABBFromVec
+        wbp_collision::PrimitiveAABB movementAABB = wbp_collision::CreateAABBFromAABBMovement
         (
-            movementVec, runnerTransform->GetPreviousPosition()
+            totalAABB, 
+            runnerTransform->GetPreviousWorldMatrixWithoutRot(), 
+            XMMatrixIdentity()
         );
 
         for (const std::unique_ptr<wb::IOptionalValue> &id : (args.entityIDView_)(wbp_collision::BoxColliderComponentID()))
@@ -153,8 +161,8 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
                 {
                     XMFLOAT3 collidedFaceNormal = wbp_collision::GetCollidedFaceNormal
                     (
-                        movementAABB, XMMatrixIdentity(),
                         receiverAABB, receiverTransform->GetWorldMatrixWithoutRot(),
+                        movementAABB, XMMatrixIdentity(),
                         movementVec
                     );
 

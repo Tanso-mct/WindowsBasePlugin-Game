@@ -3,6 +3,8 @@
 
 #include "example/include/mode.h"
 
+#include "example/include/feature/system_controller.h"
+
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
 
@@ -161,8 +163,10 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 
 #elif defined(EXAMPLE_MODE_COLLISION)
 
+    systemCont.Get(example::ControllerSystemID()).Update(args);
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
     systemCont.Get(wbp_collision::CollisionSystemID()).Update(args);
+    systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
 #endif
 }

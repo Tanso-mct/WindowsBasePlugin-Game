@@ -47,6 +47,25 @@ WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromVec
     return wbp_collision::PrimitiveAABB(min, max);
 }
 
+WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABBMovement
+(
+    const wbp_collision::PrimitiveAABB &aabb,
+    const DirectX::XMMATRIX &beforeMat, const DirectX::XMMATRIX &afterMat
+){
+    XMVECTOR beforeMin = XMVector3TransformCoord(aabb.GetMinVec(), beforeMat);
+    XMVECTOR beforeMax = XMVector3TransformCoord(aabb.GetMaxVec(), beforeMat);
+    wbp_collision::PrimitiveAABB transformedAABB(beforeMin, beforeMax);
+
+    XMVECTOR afterMin = XMVector3TransformCoord(aabb.GetMinVec(), afterMat);
+    XMVECTOR afterMax = XMVector3TransformCoord(aabb.GetMaxVec(), afterMat);
+    wbp_collision::PrimitiveAABB afterAABB(afterMin, afterMax);
+
+    return wbp_collision::CreateAABBFromAABBs
+    (
+        { transformedAABB, afterAABB }, DirectX::XMMatrixIdentity()
+    );
+}
+
 WBP_COLLISION_API bool wbp_collision::IntersectAABBs
 (
     const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 

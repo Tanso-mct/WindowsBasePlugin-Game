@@ -25,6 +25,12 @@
     <Filter Include="ヘッダー ファイル\window_game_example">
       <UniqueIdentifier>{b1b76181-f494-4692-94f5-5663495c3bb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\feature">
+      <UniqueIdentifier>{02a6059b-b57d-467f-9376-1c44798b9846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\feature">
+      <UniqueIdentifier>{08e21375-cfc5-4ffb-a41f-d40083f8c3a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entry.cpp">
@@ -60,6 +66,12 @@
     <ClCompile Include="src\window_game_example\window.cpp">
       <Filter>ソース ファイル\window_game_example</Filter>
     </ClCompile>
+    <ClCompile Include="src\feature\component_controller.cpp">
+      <Filter>ソース ファイル\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="src\feature\system_controller.cpp">
+      <Filter>ソース ファイル\feature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -94,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="include\mode.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\component_controller.h">
+      <Filter>ヘッダー ファイル\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\system_controller.h">
+      <Filter>ヘッダー ファイル\feature</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

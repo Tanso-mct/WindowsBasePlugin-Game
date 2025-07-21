@@ -18,6 +18,12 @@ namespace wbp_collision
         const DirectX::XMFLOAT3 &vec, const DirectX::XMFLOAT3 &origin
     );
 
+    WBP_COLLISION_API wbp_collision::PrimitiveAABB CreateAABBFromAABBMovement
+    (
+        const wbp_collision::PrimitiveAABB &aabb,
+        const DirectX::XMMATRIX &beforeMat, const DirectX::XMMATRIX &afterMat
+    );
+
     WBP_COLLISION_API bool IntersectAABBs
     (
         const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat,
