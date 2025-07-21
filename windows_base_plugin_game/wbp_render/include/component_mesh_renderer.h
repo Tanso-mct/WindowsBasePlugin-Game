@@ -1,0 +1,29 @@
+﻿#pragma once
+#include "wbp_render/include/dll_config.h"
+#include "windows_base/windows_base.h"
+
+#include "wbp_render/include/interfaces/component_mesh_renderer.h"
+
+#include <wrl/client.h>
+
+namespace wbp_render
+{
+    const size_t &MeshRendererComponentID();
+
+    class WBP_RENDER_API MeshRenderComponent : public IMeshRendererComponent
+    {
+    private:
+        size_t modelAssetID_;
+        Microsoft::WRL::ComPtr<ID3D12Resource> worldMatBuffer_;
+
+    public:
+        MeshRenderComponent() = default;
+        ~MeshRenderComponent() override = default;
+
+        const size_t &GetModelAssetID() const override { return modelAssetID_; }
+        void SetModelAssetID(const size_t &modelAssetID) override { modelAssetID_ = modelAssetID; }
+
+        ID3D12Resource *GetWorldMatBuffer() override { return worldMatBuffer_.Get(); }
+    };
+
+} // namespace wbp_render

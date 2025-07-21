@@ -182,7 +182,7 @@ void example::GameExampleEntitiesFactory::Create
         wb::ConsoleLog(msg);
     }
 
-elif defined(EXAMPLE_MODE_FBX_LOADER)
+#elif defined(EXAMPLE_MODE_FBX_LOADER)
 
     // Output the explanation
     {

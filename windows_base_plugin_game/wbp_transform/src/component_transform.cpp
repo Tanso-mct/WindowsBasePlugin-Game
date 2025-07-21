@@ -388,6 +388,6 @@ void wbp_transform::TransformComponent::CleanNotExistEntities
 
 namespace wbp_transform
 {
-    WB_REGISTER_COMPONENT(TransformComponent, TransformComponentID());
+    WB_REGISTER_COMPONENT(TransformComponentID(), TransformComponent);
 
 } // namespace wbp_transform
