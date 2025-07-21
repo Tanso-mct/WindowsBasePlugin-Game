@@ -13,7 +13,9 @@ namespace wbp_collision
         virtual ~IColliderShapeAsset() = default;
 
         virtual std::vector<DirectX::XMFLOAT3> &GetVertices() = 0;
+
         virtual std::vector<PrimitiveAABB> &GetAABBs() = 0;
+        virtual PrimitiveAABB &GetTotalAABB() = 0;
     };
 
 } // namespace wbp_collision

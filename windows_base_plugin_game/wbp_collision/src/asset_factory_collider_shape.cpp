@@ -3,6 +3,8 @@
 
 #include "wbp_collision/include/asset_collider_shape.h"
 
+#include "wbp_collision/include/primitive_helpers.h"
+
 #include <DirectXMath.h>
 using namespace DirectX;
 
@@ -71,6 +73,9 @@ std::unique_ptr<wb::IAsset> wbp_collision::ColliderShapeAssetFactory::Create(wb:
         // Set AABB from vertices
         colliderShapeAsset->GetAABBs().emplace_back(wbp_collision::PrimitiveAABB(min, max));
     }
+
+    // Create AABB from all AABBs
+    colliderShapeAsset->GetTotalAABB() = wbp_collision::CreateAABBFromAABBs(colliderShapeAsset->GetAABBs());
 
     // Cast to IAsset
     std::unique_ptr<wb::IAsset> asset = wb::UniqueAs<wb::IAsset>(colliderShapeAsset);

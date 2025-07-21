@@ -52,10 +52,12 @@ namespace wbp_collision
         DirectX::XMFLOAT3 max_;
         DirectX::XMFLOAT3 center_;
         DirectX::XMFLOAT3 extents_;
+        DirectX::XMFLOAT3 size_;
 
     public:
         PrimitiveAABB();
         PrimitiveAABB(const DirectX::XMFLOAT3 &min, const DirectX::XMFLOAT3 &max);
+        PrimitiveAABB(DirectX::XMVECTOR minVec, DirectX::XMVECTOR maxVec);
         virtual ~PrimitiveAABB() = default;
 
         /***************************************************************************************************************
@@ -83,6 +85,10 @@ namespace wbp_collision
         const DirectX::XMFLOAT3 &GetExtents() const { return extents_; }
         DirectX::XMVECTOR GetExtentsVec() const { return XMLoadFloat3(&extents_); }
         void SetExtents(const DirectX::XMFLOAT3 &extents);
+
+        const DirectX::XMFLOAT3 &GetSize() const { return size_; }
+        DirectX::XMVECTOR GetSizeVec() const { return XMLoadFloat3(&size_); }
+        void SetSize(const DirectX::XMFLOAT3 &size);
     };
 
     constexpr DirectX::XMFLOAT3 INITIAL_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);

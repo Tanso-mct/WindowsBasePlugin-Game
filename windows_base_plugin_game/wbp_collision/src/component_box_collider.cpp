@@ -14,9 +14,9 @@ const size_t &wbp_collision::BoxColliderComponent::GetID() const
     return BoxColliderComponentID();
 }
 
-size_t wbp_collision::BoxColliderComponent::GetAABBCount(std::unique_ptr<wb::IAssetContainer> &assetContainer) const
+size_t wbp_collision::BoxColliderComponent::GetAABBCount(wb::IAssetContainer &assetContainer) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer.ThreadSafeGet(colliderShapeAssetID_);
 
     wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
     if (colliderShapeAsset == nullptr)
@@ -39,10 +39,10 @@ size_t wbp_collision::BoxColliderComponent::GetAABBCount(std::unique_ptr<wb::IAs
 
 const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderComponent::GetAABBs
 (
-    std::unique_ptr<wb::IAssetContainer> &assetContainer
+    wb::IAssetContainer &assetContainer
 ) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer.ThreadSafeGet(colliderShapeAssetID_);
 
     wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
     if (colliderShapeAsset == nullptr)
@@ -65,10 +65,10 @@ const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderCompo
 
 const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
 (
-    size_t index, std::unique_ptr<wb::IAssetContainer> &assetContainer
+    size_t index, wb::IAssetContainer &assetContainer
 ) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer.ThreadSafeGet(colliderShapeAssetID_);
 
     wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
     if (colliderShapeAsset == nullptr)

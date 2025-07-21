@@ -73,6 +73,14 @@ wbp_collision::PrimitiveAABB::PrimitiveAABB(const XMFLOAT3 &min, const XMFLOAT3 
     UpdateExtents(extents_, min_, max_);
 }
 
+wbp_collision::PrimitiveAABB::PrimitiveAABB(DirectX::XMVECTOR minVec, DirectX::XMVECTOR maxVec)
+{
+    XMStoreFloat3(&min_, minVec);
+    XMStoreFloat3(&max_, maxVec);
+    UpdateCenter(center_, min_, max_);
+    UpdateExtents(extents_, min_, max_);
+}
+
 void wbp_collision::PrimitiveAABB::SetMin(const XMFLOAT3 &min)
 {
     min_ = min;
@@ -97,6 +105,17 @@ void wbp_collision::PrimitiveAABB::SetCenter(const XMFLOAT3 &center)
 void wbp_collision::PrimitiveAABB::SetExtents(const XMFLOAT3 &extents)
 {
     extents_ = extents;
+    UpdateMin(min_, center_, extents_);
+    UpdateMax(max_, center_, extents_);
+}
+
+void wbp_collision::PrimitiveAABB::SetSize(const DirectX::XMFLOAT3 &size)
+{
+    size_ = size;
+    extents_.x = size.x * 0.5f;
+    extents_.y = size.y * 0.5f;
+    extents_.z = size.z * 0.5f;
+
     UpdateMin(min_, center_, extents_);
     UpdateMax(max_, center_, extents_);
 }

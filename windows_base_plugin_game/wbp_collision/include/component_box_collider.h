@@ -41,9 +41,9 @@ namespace wbp_collision
 
         void SetColliderShapeAssetID(size_t colliderShapeAssetID) override { colliderShapeAssetID_ = colliderShapeAssetID; }
 
-        size_t GetAABBCount(std::unique_ptr<wb::IAssetContainer> &assetContainer) const override;
-        const std::vector<PrimitiveAABB> &GetAABBs(std::unique_ptr<wb::IAssetContainer> &assetContainer) const override;
-        const PrimitiveAABB &GetAABB(size_t index, std::unique_ptr<wb::IAssetContainer> &assetContainer) const override;
+        size_t GetAABBCount(wb::IAssetContainer &assetContainer) const override;
+        const std::vector<PrimitiveAABB> &GetAABBs(wb::IAssetContainer &assetContainer) const override;
+        const PrimitiveAABB &GetAABB(size_t index, wb::IAssetContainer &assetContainer) const override;
     };
 
 } // namespace wbp_collision

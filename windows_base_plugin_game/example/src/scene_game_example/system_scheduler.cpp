@@ -12,6 +12,9 @@
 #include "wbp_render/plugin.h"
 #pragma comment(lib, "wbp_render.lib")
 
+#include "wbp_collision/plugin.h"
+#pragma comment(lib, "wbp_collision.lib")
+
 using namespace DirectX;
 
 void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCont, wb::SystemArgument &args)
@@ -159,6 +162,7 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 #elif defined(EXAMPLE_MODE_COLLISION)
 
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
+    systemCont.Get(wbp_collision::CollisionSystemID()).Update(args);
 
 #endif
 }

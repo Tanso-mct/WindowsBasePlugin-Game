@@ -23,9 +23,9 @@ namespace wbp_collision
         // Set the ID of the Asset, which has the shape of a collider
         virtual void SetColliderShapeAssetID(size_t colliderShapeAssetID) = 0;
 
-        virtual size_t GetAABBCount(std::unique_ptr<wb::IAssetContainer> &assetContainer) const = 0;
-        virtual const std::vector<PrimitiveAABB> &GetAABBs(std::unique_ptr<wb::IAssetContainer> &assetContainer) const = 0;
-        virtual const PrimitiveAABB &GetAABB(size_t index, std::unique_ptr<wb::IAssetContainer> &assetContainer) const = 0;
+        virtual size_t GetAABBCount(wb::IAssetContainer &assetContainer) const = 0;
+        virtual const std::vector<PrimitiveAABB> &GetAABBs(wb::IAssetContainer &assetContainer) const = 0;
+        virtual const PrimitiveAABB &GetAABB(size_t index, wb::IAssetContainer &assetContainer) const = 0;
     };
 
 } // namespace wbp_collision

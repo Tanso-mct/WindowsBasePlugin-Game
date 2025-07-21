@@ -37,7 +37,7 @@ namespace wbp_collision
         const wb::IOptionalValue &GetCollidedEntityID(size_t index) const override;
         const DirectX::XMFLOAT3 &GetCollidedFaceNormal(size_t index) const override;
 
-        void AddCollided(std::unique_ptr<wb::OptionalValue> entityID, const DirectX::XMFLOAT3 &normal) override;
+        void AddCollided(std::unique_ptr<wb::IOptionalValue> entityID, const DirectX::XMFLOAT3 &normal) override;
         void ClearCollided() override;
     };
 

@@ -56,7 +56,7 @@ const DirectX::XMFLOAT3 &wbp_collision::CollisionResultComponent::GetCollidedFac
 
 void wbp_collision::CollisionResultComponent::AddCollided
 (
-    std::unique_ptr<wb::OptionalValue> entityID, const DirectX::XMFLOAT3 &normal
+    std::unique_ptr<wb::IOptionalValue> entityID, const DirectX::XMFLOAT3 &normal
 ){
     if (entityID == nullptr || !entityID->IsValid())
     {

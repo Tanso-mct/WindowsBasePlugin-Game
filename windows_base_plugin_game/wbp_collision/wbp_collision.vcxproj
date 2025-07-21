@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\asset_factory_collider_shape.cpp" />
+    <ClCompile Include="src\collision_pass_box.cpp" />
     <ClCompile Include="src\component_box_collider.cpp" />
     <ClCompile Include="src\component_collision_result.cpp" />
     <ClCompile Include="src\pch.cpp">
@@ -149,17 +150,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\primitive.cpp" />
+    <ClCompile Include="src\primitive_helpers.cpp" />
+    <ClCompile Include="src\system_collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\asset_collider_shape.h" />
     <ClInclude Include="include\asset_factory_collider_shape.h" />
+    <ClInclude Include="include\collision_pass_box.h" />
     <ClInclude Include="include\component_box_collider.h" />
     <ClInclude Include="include\component_collision_result.h" />
     <ClInclude Include="include\dll_config.h" />
     <ClInclude Include="include\interfaces\asset_collider_shape.h" />
+    <ClInclude Include="include\interfaces\colllision_pass.h" />
     <ClInclude Include="include\interfaces\component_box_collider.h" />
     <ClInclude Include="include\interfaces\component_collision_result.h" />
     <ClInclude Include="include\primitive.h" />
+    <ClInclude Include="include\primitive_helpers.h" />
+    <ClInclude Include="include\system_collision.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
