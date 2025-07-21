@@ -1,0 +1,168 @@
+﻿#include "wbp_collision/src/pch.h"
+#include "wbp_collision/include/primitive_helpers.h"
+
+using namespace DirectX;
+
+WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABBs
+(
+    const std::vector<wbp_collision::PrimitiveAABB> &aabbs, 
+    const XMMATRIX &convertMat
+){
+    XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
+    XMFLOAT3 max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+
+    for (const auto &aabb : aabbs)
+    {
+        XMFLOAT3 aabbMin = aabb.GetMin();
+        XMFLOAT3 aabbMax = aabb.GetMax();
+
+        // Transform the min and max points using the conversion matrix
+        XMVECTOR transformedMin = XMVector3TransformCoord(aabb.GetMinVec(), convertMat);
+        XMVECTOR transformedMax = XMVector3TransformCoord(aabb.GetMaxVec(), convertMat);
+
+        // Update the overall min and max
+        if (XMVectorGetX(transformedMin) < min.x) min.x = XMVectorGetX(transformedMin);
+        if (XMVectorGetY(transformedMin) < min.y) min.y = XMVectorGetY(transformedMin);
+        if (XMVectorGetZ(transformedMin) < min.z) min.z = XMVectorGetZ(transformedMin);
+
+        if (XMVectorGetX(transformedMax) > max.x) max.x = XMVectorGetX(transformedMax);
+        if (XMVectorGetY(transformedMax) > max.y) max.y = XMVectorGetY(transformedMax);
+        if (XMVectorGetZ(transformedMax) > max.z) max.z = XMVectorGetZ(transformedMax);
+    }
+
+    return wbp_collision::PrimitiveAABB(min, max);
+}
+
+WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromVec
+(
+    const DirectX::XMFLOAT3 &vec, const DirectX::XMFLOAT3 &origin
+){
+    XMVECTOR vecExtents = XMLoadFloat3(&vec) / 2.0f;
+    XMVECTOR vecCenter = XMLoadFloat3(&origin) + vecExtents;
+
+    XMFLOAT3 min, max;
+    XMStoreFloat3(&min, vecCenter - vecExtents);
+    XMStoreFloat3(&max, vecCenter + vecExtents);
+
+    return wbp_collision::PrimitiveAABB(min, max);
+}
+
+WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABBMovement
+(
+    const wbp_collision::PrimitiveAABB &aabb,
+    const DirectX::XMMATRIX &beforeMat, const DirectX::XMMATRIX &afterMat
+){
+    XMVECTOR beforeMin = XMVector3TransformCoord(aabb.GetMinVec(), beforeMat);
+    XMVECTOR beforeMax = XMVector3TransformCoord(aabb.GetMaxVec(), beforeMat);
+    wbp_collision::PrimitiveAABB transformedAABB(beforeMin, beforeMax);
+
+    XMVECTOR afterMin = XMVector3TransformCoord(aabb.GetMinVec(), afterMat);
+    XMVECTOR afterMax = XMVector3TransformCoord(aabb.GetMaxVec(), afterMat);
+    wbp_collision::PrimitiveAABB afterAABB(afterMin, afterMax);
+
+    return wbp_collision::CreateAABBFromAABBs
+    (
+        { transformedAABB, afterAABB }, DirectX::XMMatrixIdentity()
+    );
+}
+
+WBP_COLLISION_API bool wbp_collision::IntersectAABBs
+(
+    const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
+    const wbp_collision::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat
+){    
+    // Transform the AABBs using the conversion matrices
+    XMVECTOR aabb1Min = XMVector3TransformCoord(aabb1.GetMinVec(), aabb1ConvertMat);
+    XMVECTOR aabb1Max = XMVector3TransformCoord(aabb1.GetMaxVec(), aabb1ConvertMat);
+    XMVECTOR aabb2Min = XMVector3TransformCoord(aabb2.GetMinVec(), aabb2ConvertMat);
+    XMVECTOR aabb2Max = XMVector3TransformCoord(aabb2.GetMaxVec(), aabb2ConvertMat);
+
+    // Check for overlap in each dimension
+    return 
+    (   
+        XMVectorGetX(aabb1Max) >= XMVectorGetX(aabb2Min) &&
+        XMVectorGetY(aabb1Max) >= XMVectorGetY(aabb2Min) &&
+        XMVectorGetZ(aabb1Max) >= XMVectorGetZ(aabb2Min) &&
+        XMVectorGetX(aabb1Min) <= XMVectorGetX(aabb2Max) &&
+        XMVectorGetY(aabb1Min) <= XMVectorGetY(aabb2Max) &&
+        XMVectorGetZ(aabb1Min) <= XMVectorGetZ(aabb2Max)
+    );
+}
+
+WBP_COLLISION_API XMFLOAT3 wbp_collision::GetCollidedFaceNormal
+(
+    const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
+    const wbp_collision::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat, 
+    const XMFLOAT3 &movement
+){
+    XMVECTOR aabb1Min = XMVector3TransformCoord(aabb1.GetMinVec(), aabb1ConvertMat);
+    XMVECTOR aabb1Max = XMVector3TransformCoord(aabb1.GetMaxVec(), aabb1ConvertMat);
+    wbp_collision::PrimitiveAABB transformedAABB1(aabb1Min, aabb1Max);
+
+    XMVECTOR aabb2Min = XMVector3TransformCoord(aabb2.GetMinVec(), aabb2ConvertMat);
+    XMVECTOR aabb2Max = XMVector3TransformCoord(aabb2.GetMaxVec(), aabb2ConvertMat);
+    wbp_collision::PrimitiveAABB transformedAABB2(aabb2Min, aabb2Max);
+
+    // Get relative position of AABBs
+    XMVECTOR relativePos = XMVectorSubtract(transformedAABB2.GetCenterVec(), transformedAABB1.GetCenterVec());
+
+    // Calculate the amount of overlap for each axis
+    XMVECTOR overlap = transformedAABB2.GetExtentsVec() + transformedAABB1.GetExtentsVec() - XMVectorAbs(relativePos);
+
+    XMFLOAT3 normal = { 0.0f, 0.0f, 0.0f };
+
+    XMFLOAT3 overlapFloat3;
+    XMStoreFloat3(&overlapFloat3, overlap);
+
+    XMFLOAT3 relativeFloat3;
+    XMStoreFloat3(&relativeFloat3, relativePos);
+
+    // Detects the smallest overlapping axis
+    if (overlapFloat3.x < overlapFloat3.y && overlapFloat3.x < overlapFloat3.z)
+    {
+        // Collision in X-axis direction
+        normal.x = (relativeFloat3.x > 0) ? 1.0f : -1.0f;
+        normal.y = 0.0f;
+        normal.z = 0.0f;
+
+        // Correction from X component of move vector
+        if ((movement.x >= 0.0f && normal.x == 1.0f) || (movement.x <= 0.0f && normal.x == -1.0f))
+        {
+            // If the movement vector and the normal of the collision surface are in the same direction, 
+            // the X component is set to 0.
+            normal.x = 0.0f;
+        }
+    } 
+    else if (overlapFloat3.y < overlapFloat3.z)
+    {
+        // Collision in Y-axis direction
+        normal.x = 0.0f;
+        normal.y = (relativeFloat3.y > 0) ? 1.0f : -1.0f;
+        normal.z = 0.0f;
+
+        // Correction from Y component of move vector
+        if ((movement.y >= 0.0f && normal.y == 1.0f) || (movement.y <= 0.0f && normal.y == -1.0f))
+        {
+            // If the movement vector and the normal of the collision surface are in the same direction,
+            // the Y component is set to 0.
+            normal.y = 0.0f;
+        }
+    } 
+    else
+    {
+        // Collision in Z-axis direction
+        normal.x = 0.0f;
+        normal.y = 0.0f;
+        normal.z = (relativeFloat3.z > 0) ? 1.0f : -1.0f;
+
+        // Correction from Z component of move vector
+        if ((movement.z >= 0.0f && normal.z == 1.0f) || (movement.z <= 0.0f && normal.z == -1.0f))
+        {
+            // If the movement vector and the normal of the collision surface are in the same direction,
+            // the Z component is set to 0.
+            normal.z = 0.0f;
+        }
+    }
+
+    return normal;
+}

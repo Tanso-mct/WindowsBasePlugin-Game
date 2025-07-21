@@ -7,6 +7,9 @@
 #include "wbp_model/plugin.h"
 #pragma comment(lib, "wbp_model.lib")
 
+#include "wbp_collision/plugin.h"
+#pragma comment(lib, "wbp_collision.lib")
+
 #if defined(EXAMPLE_MODE_FBX_LOADER)
 
 const size_t &example::MockAssetFactoryID()
@@ -28,7 +31,7 @@ const size_t &example::MockAssetID()
 
 namespace example
 {
-    WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), "../resources/example/basic_humanoid.fbx");
+    WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), "../resources/example/character.fbx");
 
 } // namespace example
 
@@ -50,6 +53,60 @@ namespace example
 
 } // namespace example
 
+#elif defined(EXAMPLE_MODE_COLLISION)
+
+const size_t &example::CharacterModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::CharacterColliderShapeAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::FieldModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::FieldColliderShapeAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+namespace example
+{
+    WB_REGISTER_ASSET
+    (
+        CharacterModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/character.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        CharacterColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/character_collider_shape.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        FieldModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/field.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        FieldColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/field_collider_shape.fbx"
+    );
+
+} // namespace example
+
 #endif
 
 
@@ -63,6 +120,13 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
 #elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
     AddAssetID(example::CharacterModelAssetID());
+
+#elif defined(EXAMPLE_MODE_COLLISION)
+
+    AddAssetID(example::CharacterModelAssetID());
+    AddAssetID(example::CharacterColliderShapeAssetID());
+    AddAssetID(example::FieldModelAssetID());
+    AddAssetID(example::FieldColliderShapeAssetID());
 
 #endif
 }

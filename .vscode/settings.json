@@ -68,9 +68,11 @@
         "xmemory": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "array": "cpp"
     },
     "cSpell.words": [
+        "AABB",
         "IFBX"
     ]
 }

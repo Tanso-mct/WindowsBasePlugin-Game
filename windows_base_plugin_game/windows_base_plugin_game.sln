@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_d3d12", "wbp_d3d12\wbp_
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_render", "wbp_render\wbp_render.vcxproj", "{A5A68C10-2821-4E38-A557-724A2E7FA7FE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_collision", "wbp_collision\wbp_collision.vcxproj", "{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -91,6 +93,14 @@ Global
 		{A5A68C10-2821-4E38-A557-724A2E7FA7FE}.Release|x64.Build.0 = Release|x64
 		{A5A68C10-2821-4E38-A557-724A2E7FA7FE}.Release|x86.ActiveCfg = Release|Win32
 		{A5A68C10-2821-4E38-A557-724A2E7FA7FE}.Release|x86.Build.0 = Release|Win32
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Debug|x64.ActiveCfg = Debug|x64
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Debug|x64.Build.0 = Debug|x64
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Debug|x86.ActiveCfg = Debug|Win32
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Debug|x86.Build.0 = Debug|Win32
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x64.ActiveCfg = Release|x64
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x64.Build.0 = Release|x64
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x86.ActiveCfg = Release|Win32
+		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

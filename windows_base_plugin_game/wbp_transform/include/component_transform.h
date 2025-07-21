@@ -88,6 +88,9 @@ namespace wbp_transform
         DirectX::XMMATRIX GetWorldMatrix() const override;
         DirectX::XMMATRIX GetWorldMatrixWithoutRot() const override;
 
+        DirectX::XMMATRIX GetPreviousWorldMatrix() const override;
+        DirectX::XMMATRIX GetPreviousWorldMatrixWithoutRot() const override;
+
     private:
         void SetPosition(const DirectX::XMFLOAT3 &pos) override;
         void SetRotation(const DirectX::XMFLOAT3 &rot) override;

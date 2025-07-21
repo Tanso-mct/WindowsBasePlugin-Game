@@ -25,6 +25,13 @@ namespace example
 
     const size_t &CharacterModelAssetID();
 
+#elif defined(EXAMPLE_MODE_COLLISION)
+
+    const size_t &CharacterModelAssetID();
+    const size_t &CharacterColliderShapeAssetID();
+    const size_t &FieldModelAssetID();
+    const size_t &FieldColliderShapeAssetID();
+
 #endif
 
     class GameExampleAssetGroup : public wb::AssetGroup

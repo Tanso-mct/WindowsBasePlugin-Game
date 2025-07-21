@@ -82,6 +82,9 @@ namespace wbp_transform
         virtual DirectX::XMMATRIX GetWorldMatrix() const = 0;
         virtual DirectX::XMMATRIX GetWorldMatrixWithoutRot() const = 0;
 
+        virtual DirectX::XMMATRIX GetPreviousWorldMatrix() const = 0;
+        virtual DirectX::XMMATRIX GetPreviousWorldMatrixWithoutRot() const = 0;
+
     private:
         /***************************************************************************************************************
          * Methods for setting world coordinates

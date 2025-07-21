@@ -352,6 +352,24 @@ DirectX::XMMATRIX wbp_transform::TransformComponent::GetWorldMatrixWithoutRot() 
     return scaleMat * transMat;
 }
 
+DirectX::XMMATRIX wbp_transform::TransformComponent::GetPreviousWorldMatrix() const
+{
+    XMMATRIX scaleMat = XMMatrixScaling(previousLocalScale_.x, previousLocalScale_.y, previousLocalScale_.z);
+    XMVECTOR quat = XMLoadFloat4(&previousRotation_);
+    XMMATRIX rotMat = XMMatrixRotationQuaternion(quat);
+    XMMATRIX transMat = XMMatrixTranslation(previousPosition_.x, previousPosition_.y, previousPosition_.z);
+
+    return scaleMat * rotMat * transMat;
+}
+
+DirectX::XMMATRIX wbp_transform::TransformComponent::GetPreviousWorldMatrixWithoutRot() const
+{
+    XMMATRIX scaleMat = XMMatrixScaling(previousLocalScale_.x, previousLocalScale_.y, previousLocalScale_.z);
+    XMMATRIX transMat = XMMatrixTranslation(previousPosition_.x, previousPosition_.y, previousPosition_.z);
+
+    return scaleMat * transMat;
+}
+
 void wbp_transform::TransformComponent::UpdateDirtyFlags()
 {
     if (isDirty_)
