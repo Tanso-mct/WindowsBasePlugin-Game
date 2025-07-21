@@ -17,7 +17,7 @@ namespace wbp_identity
         virtual const size_t &GetLayer() const = 0;
         virtual void SetLayer(const size_t &layer) = 0;
 
-        virtual const bool &IsActiveSelf() const = 0;
+        virtual bool IsActiveSelf() const = 0;
         virtual void SetActiveSelf(bool active) = 0;
     };
 

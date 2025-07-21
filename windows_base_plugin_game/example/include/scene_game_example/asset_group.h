@@ -25,7 +25,7 @@ namespace example
 
     const size_t &CharacterModelAssetID();
 
-#elif defined(EXAMPLE_MODE_COLLISION)
+#elif defined(EXAMPLE_MODE_COLLISION) || defined(EXAMPLE_MODE_PHYSICS)
 
     const size_t &CharacterModelAssetID();
     const size_t &CharacterColliderShapeAssetID();

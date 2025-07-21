@@ -53,7 +53,7 @@ namespace example
 
 } // namespace example
 
-#elif defined(EXAMPLE_MODE_COLLISION)
+#elif defined(EXAMPLE_MODE_COLLISION) || defined(EXAMPLE_MODE_PHYSICS)
 
 const size_t &example::CharacterModelAssetID()
 {
@@ -121,7 +121,7 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
 
     AddAssetID(example::CharacterModelAssetID());
 
-#elif defined(EXAMPLE_MODE_COLLISION)
+#elif defined(EXAMPLE_MODE_COLLISION) || defined(EXAMPLE_MODE_PHYSICS)
 
     AddAssetID(example::CharacterModelAssetID());
     AddAssetID(example::CharacterColliderShapeAssetID());

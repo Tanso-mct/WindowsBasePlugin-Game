@@ -1,6 +1,8 @@
 ﻿#include "example/src/pch.h"
 #include "example/include/feature/system_controller.h"
 
+#include "example/include/mode.h"
+
 #include "example/include/feature/component_controller.h"
 
 #include <DirectXMath.h>
@@ -17,6 +19,9 @@ using namespace DirectX;
 
 #include "wbp_collision/plugin.h"
 #pragma comment(lib, "wbp_collision.lib")
+
+#include "wbp_physics/plugin.h"
+#pragma comment(lib, "wbp_physics.lib")
 
 const size_t &example::ControllerSystemID()
 {
@@ -242,10 +247,36 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
         XMFLOAT3 convertedAxis;
         XMStoreFloat3(&convertedAxis, axisVec);
 
+#if defined(EXAMPLE_MODE_COLLISION)
+
         if (convertedAxis.x != 0.0f || convertedAxis.y != 0.0f || convertedAxis.z != 0.0f)
         {
             transform->Translate(convertedAxis);
         }
+
+#elif defined(EXAMPLE_MODE_PHYSICS)
+
+        // Get the RigidBodyComponent
+        wb::IComponent *rigidBodyComponent = entity->GetComponent(wbp_physics::RigidBodyComponentID(), args.componentContainer_);
+        wbp_physics::IRigidBodyComponent *rigidBody = wb::As<wbp_physics::IRigidBodyComponent>(rigidBodyComponent);
+        if (rigidBody == nullptr)
+        {
+            std::string err = wb::CreateErrorMessage
+            (
+                __FILE__, __LINE__, __FUNCTION__,
+                {
+                    "Entity does not have RigidBodyComponent.",
+                    "ControllerComponent requires RigidBodyComponent to be set.",
+                }
+            );
+            wb::ConsoleLogErr(err);
+            wb::ErrorNotify("WBP_CONTROLLER", err);
+            wb::ThrowRuntimeError(err);
+        }
+
+        rigidBody->SetVelocity(convertedAxis);
+
+#endif
 
         // Rotate camera using mouse movement
         if (mouseMonitor->GetDeltaPositionX() != 0 || mouseMonitor->GetDeltaPositionY() != 0)

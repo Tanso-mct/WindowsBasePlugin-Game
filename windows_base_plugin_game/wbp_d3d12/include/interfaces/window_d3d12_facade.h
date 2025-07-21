@@ -31,7 +31,7 @@ namespace wbp_d3d12
 
         virtual ID3D12CommandAllocator *GetCommandAllocator() = 0;
         virtual ID3D12GraphicsCommandList *GetCommandList() = 0;
-        virtual const size_t &GetCurrentFrameIndex() const = 0;
+        virtual const UINT &GetCurrentFrameIndex() const = 0;
 
         virtual void ClearViews(const float (&clearColor)[4], UINT depthStencilIndex) = 0;
         virtual void Present() = 0;

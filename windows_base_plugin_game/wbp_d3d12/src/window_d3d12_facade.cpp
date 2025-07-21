@@ -941,7 +941,7 @@ ID3D12GraphicsCommandList *wbp_d3d12::WindowD3D12Facade::GetCommandList()
     return renderTargetContext_->GetCommandLists()[swapChainContext_->GetFrameIndex()].Get();
 }
 
-const size_t &wbp_d3d12::WindowD3D12Facade::GetCurrentFrameIndex() const
+const UINT &wbp_d3d12::WindowD3D12Facade::GetCurrentFrameIndex() const
 {
     if (!context_->IsCreated())
     {
