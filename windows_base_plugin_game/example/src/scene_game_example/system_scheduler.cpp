@@ -9,6 +9,9 @@
 #include "wbp_identity/plugin.h"
 #pragma comment(lib, "wbp_identity.lib")
 
+#include "wbp_render/plugin.h"
+#pragma comment(lib, "wbp_render.lib")
+
 using namespace DirectX;
 
 void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCont, wb::SystemArgument &args)
@@ -147,6 +150,10 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
             wb::ConsoleLog(msg);
         }
     }
+
+#elif defined(EXAMPLE_MODE_RENDER)
+
+    systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
 #endif
 }

@@ -573,6 +573,12 @@ void wbp_d3d12::WindowD3D12Facade::Resized()
         renderTargetContext_->GetScissorRect(),
         context_->ClientWidth(), context_->ClientHeight()
     );
+
+    /*******************************************************************************************************************
+     * Reset the resize flag
+    /******************************************************************************************************************/
+
+    context_->NeedsResize() = false;
 }
 
 void wbp_d3d12::WindowD3D12Facade::SetSwapChainContext(std::unique_ptr<ISwapChainContext> swapChainContext)

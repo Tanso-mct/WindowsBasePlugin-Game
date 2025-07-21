@@ -10,7 +10,7 @@
 
 namespace wbp_d3d12
 {
-    class WBP_D3D12_API WindowD3D12Facade : public wb::DefaultWindowFacade, public ID3D12WindowFacade
+    class WBP_D3D12_API WindowD3D12Facade : public wb::DefaultWindowFacade, public IWindowD3D12Facade
     {
     private:
         const UINT RENDER_TARGET_COUNT;
@@ -38,7 +38,7 @@ namespace wbp_d3d12
         virtual void Resized() override;
 
         /***************************************************************************************************************
-         * ID3D12WindowFacade implementation
+         * IWindowD3D12Facade implementation
         /**************************************************************************************************************/
 
         virtual void SetSwapChainContext(std::unique_ptr<ISwapChainContext> swapChainContext) override;

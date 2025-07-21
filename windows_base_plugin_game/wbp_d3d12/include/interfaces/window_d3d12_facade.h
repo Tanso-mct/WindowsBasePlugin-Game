@@ -8,10 +8,10 @@
 
 namespace wbp_d3d12
 {
-    class ID3D12WindowFacade
+    class IWindowD3D12Facade
     {
     public:
-        virtual ~ID3D12WindowFacade() = default;
+        virtual ~IWindowD3D12Facade() = default;
 
         virtual void SetSwapChainContext(std::unique_ptr<ISwapChainContext> swapChainContext) = 0;
         virtual void SetRenderTargetContext(std::unique_ptr<IRenderTargetContext> renderTargetContext) = 0;

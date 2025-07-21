@@ -9,6 +9,9 @@
 #include "wbp_identity/plugin.h"
 #pragma comment(lib, "wbp_identity.lib")
 
+#include "wbp_render/plugin.h"
+#pragma comment(lib, "wbp_render.lib")
+
 void example::GameExampleEntitiesFactory::Create
 (
     wb::IAssetContainer &assetCont, 
@@ -205,6 +208,45 @@ void example::GameExampleEntitiesFactory::Create
             "This example demonstrates the ModelAsset loading.",
             "You can see the loaded data to set break points in the debugger.",
             "The file you need to set break points is 'wbp_fbx_loader/src/asset_factory_model.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_RENDER)
+    
+    // Create a camera entity
+    std::unique_ptr<wb::IOptionalValue> cameraEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        cameraEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::CameraComponentID(), componentCont);
+    }
+
+    // Initialize the root entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*cameraEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Main Camera");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalPosition(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
+        transform->SetLocalRotation(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+        transform->SetLocalScale(DirectX::XMFLOAT3(2.0f, 2.0f, 2.0f));
+    }
+
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_render]",
+            "This example demonstrates the Render.",
         });
         wb::ConsoleLog(msg);
     }

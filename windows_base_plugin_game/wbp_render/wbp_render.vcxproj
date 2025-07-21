@@ -141,13 +141,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\component_camera.cpp" />
+    <ClCompile Include="src\component_mesh_renderer.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\render_pass_model_forward.cpp" />
+    <ClCompile Include="src\system_render.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\component_camera.h" />
+    <ClInclude Include="include\component_mesh_renderer.h" />
     <ClInclude Include="include\dll_config.h" />
+    <ClInclude Include="include\interfaces\component_camera.h" />
+    <ClInclude Include="include\interfaces\component_mesh_renderer.h" />
+    <ClInclude Include="include\interfaces\render_pass.h" />
+    <ClInclude Include="include\lambert_pass.h" />
+    <ClInclude Include="include\render_pass_model_forward.h" />
+    <ClInclude Include="include\system_render.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
@@ -170,6 +182,24 @@
     <ProjectReference Include="..\windows_base\windows_base.vcxproj">
       <Project>{060ef2ce-203c-4ecc-bed7-5d4ffdb963fc}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\resources\wbp_render\shaders\model_forward_ps.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)resources\wbp_render\shaders\datas\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)resources\wbp_render\shaders\datas\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\resources\wbp_render\shaders\model_forward_vs.hlsl">
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)resources\wbp_render\shaders\datas\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)resources\wbp_render\shaders\datas\%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

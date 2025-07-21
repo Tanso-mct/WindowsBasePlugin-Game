@@ -1,10 +1,15 @@
 ﻿#include "wbp_render/src/pch.h"
 #include "wbp_render/include/component_mesh_renderer.h"
 
-const size_t &wbp_render::MeshRendererComponentID()
+const WBP_RENDER_API size_t &wbp_render::MeshRendererComponentID()
 {
     static size_t id = wb::IDFactory::CreateComponentID();
     return id;
+}
+
+const size_t &wbp_render::MeshRenderComponent::GetID() const
+{
+    return MeshRendererComponentID();
 }
 
 namespace wbp_render

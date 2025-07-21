@@ -8,7 +8,7 @@
 
 namespace wbp_render
 {
-    const size_t &MeshRendererComponentID();
+    const WBP_RENDER_API size_t &MeshRendererComponentID();
 
     class WBP_RENDER_API MeshRenderComponent : public IMeshRendererComponent
     {
@@ -19,6 +19,16 @@ namespace wbp_render
     public:
         MeshRenderComponent() = default;
         ~MeshRenderComponent() override = default;
+
+        /***************************************************************************************************************
+         * IComponent implementation
+        /**************************************************************************************************************/
+
+        const size_t &GetID() const override;
+
+        /***************************************************************************************************************
+         * IMeshRendererComponent implementation
+        /**************************************************************************************************************/
 
         const size_t &GetModelAssetID() const override { return modelAssetID_; }
         void SetModelAssetID(const size_t &modelAssetID) override { modelAssetID_ = modelAssetID; }
