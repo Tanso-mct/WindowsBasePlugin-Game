@@ -14,7 +14,7 @@ const size_t &wbp_collision::BoxColliderComponent::GetID() const
 
 size_t wbp_collision::BoxColliderComponent::GetAABBCount(std::unique_ptr<wb::IAssetContainer> &assetContainer) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(boxShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
     // TODO: Implement the logic to retrieve the AABB count from the asset.
 
@@ -26,7 +26,7 @@ const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderCompo
     std::unique_ptr<wb::IAssetContainer> &assetContainer
 ) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(boxShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
     // TODO: Implement the logic to retrieve the AABBs from the asset.
 
@@ -38,7 +38,7 @@ const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
     size_t index, std::unique_ptr<wb::IAssetContainer> &assetContainer
 ) const
 {
-    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(boxShapeAssetID_);
+    wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
     // TODO: Implement the logic to retrieve the specific AABB from the asset.
 
@@ -49,5 +49,5 @@ const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
 namespace wbp_collision
 {
     WB_REGISTER_COMPONENT(BoxColliderComponentID(), BoxColliderComponent);
-    
+
 } // namespace wbp_collision

@@ -17,7 +17,7 @@ namespace wbp_collision
     private:
         bool collisionEnabled_ = DEFAULT_COLLISION_ENABLED;
         bool isTrigger_ = DEFAULT_IS_TRIGGER;
-        size_t boxShapeAssetID_ = DEFAULT_BOX_SHAPE_ASSET_ID;
+        size_t colliderShapeAssetID_ = DEFAULT_BOX_SHAPE_ASSET_ID;
 
     public:
         BoxColliderComponent() = default;
@@ -39,7 +39,7 @@ namespace wbp_collision
         void SetTrigger(bool isTrigger) override { isTrigger_ = isTrigger; }
         bool IsTrigger() const override { return isTrigger_; }
 
-        void SetBoxShapeAssetID(size_t boxShapeAssetID) override { boxShapeAssetID_ = boxShapeAssetID; }
+        void SetColliderShapeAssetID(size_t colliderShapeAssetID) override { colliderShapeAssetID_ = colliderShapeAssetID; }
 
         size_t GetAABBCount(std::unique_ptr<wb::IAssetContainer> &assetContainer) const override;
         const std::vector<PrimitiveAABB> &GetAABBs(std::unique_ptr<wb::IAssetContainer> &assetContainer) const override;
