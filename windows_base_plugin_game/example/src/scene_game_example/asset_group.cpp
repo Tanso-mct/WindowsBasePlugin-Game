@@ -45,7 +45,7 @@ namespace example
     WB_REGISTER_ASSET
     (
         CharacterModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), 
-        "../resources/example/static_character.fbx"
+        "../resources/example/character.fbx"
     );
 
 } // namespace example

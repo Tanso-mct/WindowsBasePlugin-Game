@@ -236,7 +236,7 @@ void example::GameExampleEntitiesFactory::Create
 
         wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
         wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
-        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 10.0f, -40.0f));
+        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 8.0f, -25.0f));
 
         wb::IComponent *cameraComponent = entity->GetComponent(wbp_render::CameraComponentID(), componentCont);
         wbp_render::ICameraComponent *camera = wb::As<wbp_render::ICameraComponent>(cameraComponent);
