@@ -1,6 +1,8 @@
 ﻿#include "wbp_collision/src/pch.h"
 #include "wbp_collision/include/component_box_collider.h"
 
+#include "wbp_collision/include/interfaces/asset_collider_shape.h"
+
 const WBP_COLLISION_API size_t &wbp_collision::BoxColliderComponentID()
 {
     static size_t id = wb::IDFactory::CreateComponentID();
@@ -16,9 +18,23 @@ size_t wbp_collision::BoxColliderComponent::GetAABBCount(std::unique_ptr<wb::IAs
 {
     wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
-    // TODO: Implement the logic to retrieve the AABB count from the asset.
+    wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
+    if (colliderShapeAsset == nullptr)
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {
+                "The asset with the ID does not implement or not collect IColliderShapeAsset.",
+                "BoxColliderComponent requires IColliderShapeAsset to be set.",
+            }
+        );
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WBP_COLLISION", err);
+        wb::ThrowRuntimeError(err);
+    }
 
-    return 0;
+    return colliderShapeAsset->GetAABBs().size();
 }
 
 const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderComponent::GetAABBs
@@ -28,9 +44,23 @@ const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderCompo
 {
     wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
-    // TODO: Implement the logic to retrieve the AABBs from the asset.
+    wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
+    if (colliderShapeAsset == nullptr)
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {
+                "The asset with the ID does not implement or not collect IColliderShapeAsset.",
+                "BoxColliderComponent requires IColliderShapeAsset to be set.",
+            }
+        );
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WBP_COLLISION", err);
+        wb::ThrowRuntimeError(err);
+    }
 
-    return std::vector<PrimitiveAABB>();
+    return colliderShapeAsset->GetAABBs();
 }
 
 const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
@@ -40,10 +70,23 @@ const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
 {
     wb::LockedRef<wb::IAsset> asset = assetContainer->ThreadSafeGet(colliderShapeAssetID_);
 
-    // TODO: Implement the logic to retrieve the specific AABB from the asset.
+    wbp_collision::IColliderShapeAsset *colliderShapeAsset = wb::As<wbp_collision::IColliderShapeAsset>(&asset());
+    if (colliderShapeAsset == nullptr)
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {
+                "The asset with the ID does not implement or not collect IColliderShapeAsset.",
+                "BoxColliderComponent requires IColliderShapeAsset to be set.",
+            }
+        );
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WBP_COLLISION", err);
+        wb::ThrowRuntimeError(err);
+    }
 
-    static PrimitiveAABB dummyAABB;
-    return dummyAABB;
+    return colliderShapeAsset->GetAABBs().at(index);
 }
 
 namespace wbp_collision

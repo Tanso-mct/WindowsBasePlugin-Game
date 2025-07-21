@@ -36,14 +36,13 @@ std::unique_ptr<wb::IAsset> wbp_collision::ColliderShapeAssetFactory::Create(wb:
     std::unique_ptr<wbp_collision::IColliderShapeAsset> colliderShapeAsset 
         = std::make_unique<wbp_collision::ColliderShapeAsset>();
 
-    if (fbxFileData->GetMeshes().size() != 1)
+    if (fbxFileData->GetMeshes().empty())
     {
         std::string err = wb::CreateErrorMessage
         (
             __FILE__, __LINE__, __FUNCTION__,
             {
-                "Collider shape asset must use a single mesh fbx.",
-                "Found " + std::to_string(fbxFileData->GetMeshes().size()) + " meshes."
+                "FBX file does not contain any meshes."
             }
         );
         wb::ConsoleLogErr(err);
@@ -51,27 +50,27 @@ std::unique_ptr<wb::IAsset> wbp_collision::ColliderShapeAssetFactory::Create(wb:
         wb::ThrowRuntimeError(err);
     }
 
-    // Process meshes from fbx file data
-    const wbp_fbx_loader::FBXMesh &mesh = fbxFileData->GetMeshes().front();
-    
-    // Set vertices from mesh
-    XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
-    XMFLOAT3 max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
-    for (const wbp_fbx_loader::FBXVertex &vertex : mesh.vertices_)
+    for (const wbp_fbx_loader::FBXMesh &mesh : fbxFileData->GetMeshes())
     {
-        colliderShapeAsset->GetVertices().emplace_back(vertex.position_);
-        
-        if (vertex.position_.x < min.x) min.x = vertex.position_.x;
-        if (vertex.position_.y < min.y) min.y = vertex.position_.y;
-        if (vertex.position_.z < min.z) min.z = vertex.position_.z;
+        // Set vertices from mesh
+        XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
+        XMFLOAT3 max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+        for (const wbp_fbx_loader::FBXVertex &vertex : mesh.vertices_)
+        {
+            colliderShapeAsset->GetVertices().emplace_back(vertex.position_);
+            
+            if (vertex.position_.x < min.x) min.x = vertex.position_.x;
+            if (vertex.position_.y < min.y) min.y = vertex.position_.y;
+            if (vertex.position_.z < min.z) min.z = vertex.position_.z;
 
-        if (vertex.position_.x > max.x) max.x = vertex.position_.x;
-        if (vertex.position_.y > max.y) max.y = vertex.position_.y;
-        if (vertex.position_.z > max.z) max.z = vertex.position_.z;
+            if (vertex.position_.x > max.x) max.x = vertex.position_.x;
+            if (vertex.position_.y > max.y) max.y = vertex.position_.y;
+            if (vertex.position_.z > max.z) max.z = vertex.position_.z;
+        }
+
+        // Set AABB from vertices
+        colliderShapeAsset->GetAABBs().emplace_back(wbp_collision::PrimitiveAABB(min, max));
     }
-
-    // Set AABB from vertices
-    colliderShapeAsset->GetAABB() = wbp_collision::PrimitiveAABB(min, max);
 
     // Cast to IAsset
     std::unique_ptr<wb::IAsset> asset = wb::UniqueAs<wb::IAsset>(colliderShapeAsset);
