@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_render", "wbp_render\wb
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_collision", "wbp_collision\wbp_collision.vcxproj", "{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_physics", "wbp_physics\wbp_physics.vcxproj", "{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x64.Build.0 = Release|x64
 		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x86.ActiveCfg = Release|Win32
 		{A66CB02F-3FF0-4945-AAEA-0048500C5C6B}.Release|x86.Build.0 = Release|Win32
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Debug|x64.ActiveCfg = Debug|x64
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Debug|x64.Build.0 = Debug|x64
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Debug|x86.ActiveCfg = Debug|Win32
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Debug|x86.Build.0 = Debug|Win32
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Release|x64.ActiveCfg = Release|x64
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Release|x64.Build.0 = Release|x64
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Release|x86.ActiveCfg = Release|Win32
+		{61F7CBE4-C575-4141-BFFF-1C7DD42619A3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
