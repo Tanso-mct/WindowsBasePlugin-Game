@@ -125,7 +125,7 @@ void example::GameExampleEntitiesFactory::Create
     {
         std::string msg = wb::CreateMessage
         ({
-            "[WindowsBasePlugin-Game]",
+            "[WindowsBasePlugin-Game : wbp_transform]",
             "This example demonstrates the TransformComponent's parent-child relationships.",
             "The root entity has two children: A and B.",
             "Child A has a grandchild entity.",
@@ -170,7 +170,7 @@ void example::GameExampleEntitiesFactory::Create
     {
         std::string msg = wb::CreateMessage
         ({
-            "[WindowsBasePlugin-Game]",
+            "[WindowsBasePlugin-Game : wbp_identity]",
             "This example demonstrates the IdentityComponent.",
             "An entity with IdentityComponent has been created.",
             "It has a name, tag, layer, and active state.",
@@ -178,6 +178,33 @@ void example::GameExampleEntitiesFactory::Create
             "Entity ID: " + std::to_string((*entityID)()),
             "",
             "Press Space to output the identity information of the entity."
+        });
+        wb::ConsoleLog(msg);
+    }
+
+elif defined(EXAMPLE_MODE_FBX_LOADER)
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_fbx_loader]",
+            "This example demonstrates the FBX file loading.",
+            "You can see the loaded data to set break points in the debugger.",
+            "The file you need to set break points is 'wbp_fbx_loader/src/file_loader_fbx.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_MODEL)
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_model]",
+            "This example demonstrates the ModelAsset loading.",
+            "You can see the loaded data to set break points in the debugger.",
+            "The file you need to set break points is 'wbp_fbx_loader/src/asset_factory_model.cpp'.",
         });
         wb::ConsoleLog(msg);
     }
