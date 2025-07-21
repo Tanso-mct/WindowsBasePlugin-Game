@@ -416,3 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+## DirectXTK12's files are not need to ignore.
+!windows_base_plugin_game/directxtk12/**
