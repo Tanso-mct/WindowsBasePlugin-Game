@@ -30,6 +30,9 @@
     <ClCompile Include="src\component_collision_result.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\asset_factory_collider_shape.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -52,6 +55,15 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="include\component_collision_result.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfaces\asset_collider_shape.h">
+      <Filter>ヘッダー ファイル\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="include\asset_collider_shape.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\asset_factory_collider_shape.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

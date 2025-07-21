@@ -278,6 +278,21 @@ void example::GameExampleEntitiesFactory::Create
         ({
             "[WindowsBasePlugin-Game : wbp_render]",
             "This example demonstrates the Render.",
+            "It render a character model with a camera.",
+            "The charater model file is '../resources/example/character.fbx'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_COLLISION)
+
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_collision]",
+            "This example demonstrates the Collision.",
         });
         wb::ConsoleLog(msg);
     }

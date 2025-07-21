@@ -169,6 +169,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_collision\wbp_collision.vcxproj">
+      <Project>{a66cb02f-3ff0-4945-aaea-0048500c5c6b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_d3d12\wbp_d3d12.vcxproj">
       <Project>{580b6b50-f7c4-4191-9543-c21d0bdabacf}</Project>
     </ProjectReference>

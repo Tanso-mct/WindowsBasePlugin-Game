@@ -156,5 +156,9 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
     systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
+#elif defined(EXAMPLE_MODE_COLLISION)
+
+    systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
+
 #endif
 }
