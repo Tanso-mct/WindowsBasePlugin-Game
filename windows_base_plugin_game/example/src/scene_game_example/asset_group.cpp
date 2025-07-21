@@ -32,9 +32,9 @@ namespace example
 
 } // namespace example
 
-#elif defined(EXAMPLE_MODE_MODEL)
+#elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
-const size_t &example::BasicHumanoidModelAssetID()
+const size_t &example::CharacterModelAssetID()
 {
     static size_t id = wb::IDFactory::CreateAssetID();
     return id;
@@ -44,8 +44,8 @@ namespace example
 {
     WB_REGISTER_ASSET
     (
-        BasicHumanoidModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), 
-        "../resources/example/basic_humanoid.fbx"
+        CharacterModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), 
+        "../resources/example/static_character.fbx"
     );
 
 } // namespace example
@@ -60,9 +60,9 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
 
     AddAssetID(example::MockAssetID());
 
-#elif defined(EXAMPLE_MODE_MODEL)
+#elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
-    AddAssetID(example::BasicHumanoidModelAssetID());
+    AddAssetID(example::CharacterModelAssetID());
 
 #endif
 }

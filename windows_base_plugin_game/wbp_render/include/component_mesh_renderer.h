@@ -17,7 +17,7 @@ namespace wbp_render
         Microsoft::WRL::ComPtr<ID3D12Resource> worldMatBuffer_;
 
     public:
-        MeshRenderComponent() = default;
+        MeshRenderComponent();
         ~MeshRenderComponent() override = default;
 
         /***************************************************************************************************************

@@ -64,7 +64,6 @@ void wbp_render::RenderSystem::Initialize(wb::IAssetContainer &assetContainer)
     // Set render passes. The order of addition to vector is the order of execution.
     passes_.clear();
     passes_.emplace_back(std::make_unique<ModelForwardRenderPass>());
-
 }
 
 void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
@@ -97,6 +96,16 @@ void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
         wb::ConsoleLogErr(err);
         wb::ErrorNotify("WBP_RENDER", err);
         wb::ThrowRuntimeError(err);
+    }
+
+    if (!passesInitialized_)
+    {
+        for (const std::unique_ptr<IRenderPass> &pass : passes_)
+        {
+            pass->Initialize(d3d12Window->GetCommandAllocator());
+            d3d12Window->WaitForGPU();
+        }
+        passesInitialized_ = true;
     }
 
     // Get camera
@@ -185,7 +194,7 @@ void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
             wb::ThrowRuntimeError(err);
         }
 
-        cameraViewMat = XMMatrixLookToLH
+        cameraViewMat = XMMatrixLookAtLH
         (
             XMLoadFloat3(&transform->GetPosition()),
             transform->GetForward() + XMLoadFloat3(&transform->GetPosition()),
@@ -207,23 +216,9 @@ void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
     {
         wb::IComponent *cameraComponent = cameraEntity->GetComponent(wbp_render::CameraComponentID(), args.componentContainer_);
         wbp_render::ICameraComponent *camera = wb::As<wbp_render::ICameraComponent>(cameraComponent);
-        if (camera == nullptr)
-        {
-            std::string err = wb::CreateErrorMessage
-            (
-                __FILE__, __LINE__, __FUNCTION__,
-                {
-                    "Camera entity does not have CameraComponent.",
-                    "CameraComponent requires CameraComponent to be set.",
-                }
-            );
-            wb::ConsoleLogErr(err);
-            wb::ErrorNotify("WBP_RENDER", err);
-            wb::ThrowRuntimeError(err);
-        }
 
         // Get aspect ratio
-        float aspectRatio = static_cast<float>(window.GetClientHeight()) / static_cast<float>(window.GetClientHeight());
+        float aspectRatio = static_cast<float>(window.GetClientWidth()) / window.GetClientHeight();
 
         cameraProjectionMat = XMMatrixPerspectiveFovLH
         (
@@ -247,7 +242,7 @@ void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
     d3d12Window->SetBarrierToRenderTarget();
     d3d12Window->SetRenderTarget(DEPTH_STENCIL_FOR_DRAW);
 
-    float clearColor[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
     d3d12Window->ClearViews(clearColor, DEPTH_STENCIL_FOR_DRAW);
 
     d3d12Window->SetBarrierToPresent();
@@ -260,7 +255,13 @@ void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)
     // Execute render passes
     for (const std::unique_ptr<wbp_render::IRenderPass> &renderPass : passes_)
     {
-        ID3D12GraphicsCommandList *commandList = renderPass->Execute(args);
+        ID3D12GraphicsCommandList *commandList = renderPass->Execute
+        (
+            d3d12Window->GetCurrentFrameIndex(),
+            cameraViewMatBuff_.Get(), cameraProjectionMatBuff_.Get(),
+            args
+        );
+
         if (commandList != nullptr)
         {
             commandLists.emplace_back(commandList);

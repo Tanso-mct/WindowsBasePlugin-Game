@@ -1,7 +1,13 @@
 ﻿#include "wbp_render/src/pch.h"
 #include "wbp_render/include/render_pass_model_forward.h"
 
+#include "wbp_render/include/system_render.h"
+#include "wbp_render/include/component_mesh_renderer.h"
+
 using Microsoft::WRL::ComPtr;
+
+#include <DirectXMath.h>
+using namespace DirectX;
 
 #include "directx12_helper/include/d3dx12.h"
 #pragma comment(lib, "d3d12.lib")
@@ -9,7 +15,16 @@ using Microsoft::WRL::ComPtr;
 #include "wbp_d3d12/plugin.h"
 #pragma comment(lib, "wbp_d3d12.lib")
 
-wbp_render::ModelForwardRenderPass::ModelForwardRenderPass()
+#include "wbp_identity/plugin.h"
+#pragma comment(lib, "wbp_identity.lib")
+
+#include "wbp_transform/plugin.h"
+#pragma comment(lib, "wbp_transform.lib")
+
+#include "wbp_model/plugin.h"
+#pragma comment(lib, "wbp_model.lib")
+
+void wbp_render::ModelForwardRenderPass::Initialize(ID3D12CommandAllocator *commandAllocator)
 {
     HRESULT hr = E_FAIL;
 
@@ -284,13 +299,161 @@ wbp_render::ModelForwardRenderPass::ModelForwardRenderPass()
         wb::ErrorNotify("WBP_RENDER", err);
         wb::ThrowRuntimeError(err);
     }
+
+    /*******************************************************************************************************************
+     * Creation of CommandLists
+    /******************************************************************************************************************/
+
+    commandLists_.clear();
+    commandLists_.resize(wbp_render::RENDER_TARGET_COUNT);
+    for (UINT i = 0; i < wbp_render::RENDER_TARGET_COUNT; ++i)
+    {
+        wbp_d3d12::CreateCommandList
+        (
+            gpuContext.GetDevice(), commandAllocator,
+            commandLists_[i]
+        );
+    }
 }
 
-wbp_render::ModelForwardRenderPass::~ModelForwardRenderPass()
-{
-}
+ID3D12GraphicsCommandList *wbp_render::ModelForwardRenderPass::Execute
+(
+    const size_t &currentFrameIndex,
+    ID3D12Resource* cameraViewMatBuff, ID3D12Resource* cameraProjectionMatBuff,
+    const wb::SystemArgument &args
+){
+    // Get containers to use
+    wb::IWindowContainer &windowContainer = args.containerStorage_.GetContainer<wb::IWindowContainer>();
+    wb::IAssetContainer &assetContainer = args.containerStorage_.GetContainer<wb::IAssetContainer>();
 
-ID3D12GraphicsCommandList *wbp_render::ModelForwardRenderPass::Execute(const wb::SystemArgument &args)
-{
-    return nullptr;
+    // Get the window facade for the current window
+    wb::IWindowFacade &window = windowContainer.Get(args.belongWindowID_);
+    wbp_d3d12::IWindowD3D12Facade *d3d12Window = wb::As<wbp_d3d12::IWindowD3D12Facade>(&window);
+
+    // Get this frame's command list
+    ID3D12GraphicsCommandList *commandList = commandLists_[currentFrameIndex].Get();
+
+    commandList->Reset(d3d12Window->GetCommandAllocator(), pipelineState_.Get());
+    d3d12Window->SetBarrierToRenderTarget(commandList);
+    d3d12Window->SetRenderTarget(wbp_render::DEPTH_STENCIL_FOR_DRAW, commandList);
+
+    commandList->SetGraphicsRootSignature(rootSignature_.Get());
+    commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+    ID3D12DescriptorHeap *ppHeaps[] = { srvHeap_.Get() };
+    commandList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+    // Set view and projection matrices by camera's matrices
+    commandList->SetGraphicsRootConstantBufferView
+    (
+        ROOT_SIGNATURE_VIEW_MATRIX,
+        cameraViewMatBuff->GetGPUVirtualAddress()
+    );
+    commandList->SetGraphicsRootConstantBufferView
+    (
+        ROOT_SIGNATURE_PROJECTION_MATRIX,
+        cameraProjectionMatBuff->GetGPUVirtualAddress()
+    );
+
+    for (const std::unique_ptr<wb::IOptionalValue> &id : (args.entityIDView_)(wbp_render::MeshRendererComponentID()))
+    {
+        wb::IEntity *entity = args.entityContainer_.PtrGet(*id);
+        if (entity == nullptr) continue; // Skip if entity is null
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), args.componentContainer_);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        if (identity == nullptr)
+        {
+            std::string err = wb::CreateErrorMessage
+            (
+                __FILE__, __LINE__, __FUNCTION__,
+                {
+                    "Entity does not have IdentityComponent.",
+                    "MeshRendererComponent requires IdentityComponent to be set.",
+                }
+            );
+            wb::ConsoleLogErr(err);
+            wb::ErrorNotify("WBP_RENDER", err);
+            wb::ThrowRuntimeError(err);
+        }
+
+        if (!identity->IsActiveSelf())
+        {
+            // Skip if the entity is not active
+            continue;
+        }
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        if (transform == nullptr)
+        {
+            std::string err = wb::CreateErrorMessage
+            (
+                __FILE__, __LINE__, __FUNCTION__,
+                {
+                    "Entity does not have TransformComponent.",
+                    "MeshRendererComponent requires TransformComponent to be set.",
+                }
+            );
+            wb::ConsoleLogErr(err);
+            wb::ErrorNotify("WBP_RENDER", err);
+            wb::ThrowRuntimeError(err);
+        }
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), args.componentContainer_);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+
+        // Update world matrix buffer
+        {
+            XMMATRIX transposedMat = XMMatrixTranspose(transform->GetWorldMatrix());
+            wbp_d3d12::UpdateBuffer
+            (
+                meshRenderer->GetWorldMatBuffer(),
+                &transposedMat, sizeof(XMMATRIX)
+            );
+        }
+        
+        commandList->SetGraphicsRootConstantBufferView
+        (
+            ROOT_SIGNATURE_WORLD_MATRIX,
+            meshRenderer->GetWorldMatBuffer()->GetGPUVirtualAddress()
+        );
+
+        wb::LockedRef<wb::IAsset> modelAsset = assetContainer.ThreadSafeGet(meshRenderer->GetModelAssetID());
+        wbp_model::IModelAsset *model = wb::As<wbp_model::IModelAsset>(&modelAsset());
+        if (model == nullptr)
+        {
+            std::string err = wb::CreateErrorMessage
+            (
+                __FILE__, __LINE__, __FUNCTION__,
+                {
+                    "The model which MeshRendererComponent refers to is not a ModelAsset.",
+                    "MeshRendererComponent requires ModelAsset to be set.",
+                }
+            );
+            wb::ConsoleLogErr(err);
+            wb::ErrorNotify("WBP_RENDER", err);
+            wb::ThrowRuntimeError(err);
+        }
+
+        for (const wbp_model::MeshGPUData &meshData : model->GetMeshDatas())
+        {
+            commandList->IASetVertexBuffers(0, 1, &meshData.vertexBufferView);
+            commandList->IASetIndexBuffer(&meshData.indexBufferView);
+
+            commandList->DrawIndexedInstanced
+            (
+                meshData.indexCount, 
+                1, // Instance count
+                0, // Start index location
+                0, // Base vertex location
+                0 // Start instance location
+            );
+        }
+    }
+
+    d3d12Window->SetBarrierToPresent(commandList);
+    wbp_d3d12::CloseCommand(commandList);
+
+    return commandList;
 }

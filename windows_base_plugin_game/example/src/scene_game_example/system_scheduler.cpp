@@ -153,6 +153,7 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 
 #elif defined(EXAMPLE_MODE_RENDER)
 
+    systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
     systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
 #endif

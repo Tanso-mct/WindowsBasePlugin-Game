@@ -2,6 +2,7 @@
 #include "example/include/scene_game_example/entities_factory.h"
 
 #include "example/include/mode.h"
+#include "example/include/scene_game_example/asset_group.h"
 
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
@@ -225,7 +226,7 @@ void example::GameExampleEntitiesFactory::Create
         entity().AddComponent(wbp_render::CameraComponentID(), componentCont);
     }
 
-    // Initialize the root entity
+    // Initialize the camera entity
     {
         wb::IEntity *entity = entityCont.PtrGet(*cameraEntityID);
 
@@ -235,9 +236,39 @@ void example::GameExampleEntitiesFactory::Create
 
         wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
         wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
-        transform->SetLocalPosition(DirectX::XMFLOAT3(10.0f, 10.0f, 10.0f));
-        transform->SetLocalRotation(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
-        transform->SetLocalScale(DirectX::XMFLOAT3(2.0f, 2.0f, 2.0f));
+        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 10.0f, -40.0f));
+
+        wb::IComponent *cameraComponent = entity->GetComponent(wbp_render::CameraComponentID(), componentCont);
+        wbp_render::ICameraComponent *camera = wb::As<wbp_render::ICameraComponent>(cameraComponent);
+        camera->SetFarZ(10000.0f);
+    }
+
+    // Create basic humanoid model entity
+    std::unique_ptr<wb::IOptionalValue> modelEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        modelEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::MeshRendererComponentID(), componentCont);
+    }
+
+    // Initialize the model entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*modelEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Basic Humanoid Model");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalScale(DirectX::XMFLOAT3(0.1f, 0.1f, 0.1f));
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+        meshRenderer->SetModelAssetID(example::CharacterModelAssetID());
     }
 
 

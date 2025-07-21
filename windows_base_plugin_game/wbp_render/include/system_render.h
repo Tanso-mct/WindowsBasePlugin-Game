@@ -10,11 +10,14 @@ namespace wbp_render
 {
     const WBP_RENDER_API size_t &RenderSystemID();
 
+    constexpr UINT RENDER_TARGET_COUNT = 2;
+    constexpr UINT DEPTH_STENCIL_COUNT = 1;
     constexpr UINT DEPTH_STENCIL_FOR_DRAW = 0;
 
     class WBP_RENDER_API RenderSystem : public wb::ISystem
     {
     private:
+        bool passesInitialized_ = false;
         std::vector<std::unique_ptr<IRenderPass>> passes_;
 
         Microsoft::WRL::ComPtr<ID3D12Resource> cameraViewMatBuff_;

@@ -18,14 +18,20 @@ namespace wbp_d3d12
         virtual void SetFenceContext(std::unique_ptr<IFenceContext> fenceContext) = 0;
 
         virtual void ResetCommand(ID3D12PipelineState *pipelineState) = 0;
+        virtual void ResetCommand(ID3D12GraphicsCommandList *commandList, ID3D12PipelineState *pipelineState) = 0;
         virtual void CloseCommand() = 0;
 
         virtual void SetBarrierToRenderTarget() = 0;
+        virtual void SetBarrierToRenderTarget(ID3D12GraphicsCommandList *commandList) = 0;
         virtual void SetBarrierToPresent() = 0;
+        virtual void SetBarrierToPresent(ID3D12GraphicsCommandList *commandList) = 0;
+
         virtual void SetRenderTarget(UINT depthStencilIndex) = 0;
+        virtual void SetRenderTarget(UINT depthStencilIndex, ID3D12GraphicsCommandList *commandList) = 0;
 
         virtual ID3D12CommandAllocator *GetCommandAllocator() = 0;
         virtual ID3D12GraphicsCommandList *GetCommandList() = 0;
+        virtual const size_t &GetCurrentFrameIndex() const = 0;
 
         virtual void ClearViews(const float (&clearColor)[4], UINT depthStencilIndex) = 0;
         virtual void Present() = 0;

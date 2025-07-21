@@ -7,10 +7,16 @@
 #include "wbp_d3d12/plugin.h"
 #pragma comment(lib, "wbp_d3d12.lib")
 
+#include "wbp_render/plugin.h"
+#pragma comment(lib, "wbp_render.lib")
+
 std::unique_ptr<wb::IWindowFacade> example::GameExampleWindowFacadeFactory::Create() const
 {
-    std::unique_ptr<wb::IWindowFacade> facade 
-        = std::make_unique<wbp_d3d12::WindowD3D12Facade>(example::RENDER_TARGET_COUNT, example::DEPTH_STENCIL_COUNT);
+    std::unique_ptr<wb::IWindowFacade> facade = std::make_unique<wbp_d3d12::WindowD3D12Facade>
+    (
+        wbp_render::RENDER_TARGET_COUNT, 
+        wbp_render::DEPTH_STENCIL_COUNT
+    );
 
     {
         std::unique_ptr<wb::IWindowContext> context = std::make_unique<wb::WindowContext>();
