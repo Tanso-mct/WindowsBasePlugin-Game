@@ -228,6 +228,10 @@ std::unique_ptr<wb::IFileData> wbp_fbx_loader::FBXFileLoader::Load(std::string_v
         dx.DeepConvertScene(fbxScene);
     }
 
+    FbxGeometryConverter converter(fbxManager);
+    // converter.SplitMeshesPerMaterial(fbxScene, true);
+    converter.Triangulate(fbxScene, true);
+
     int animCount = fbxImporter->GetAnimStackCount();
 
     fbxNode = fbxScene->GetRootNode();
