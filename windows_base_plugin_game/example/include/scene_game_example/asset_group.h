@@ -21,6 +21,10 @@ namespace example
 
     const size_t &MockAssetID();
 
+#elif defined(EXAMPLE_MODE_MODEL)
+
+    const size_t &BasicHumanoidModelAssetID();
+
 #endif
 
     class GameExampleAssetGroup : public wb::AssetGroup

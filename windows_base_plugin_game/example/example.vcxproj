@@ -169,11 +169,17 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_d3d12\wbp_d3d12.vcxproj">
+      <Project>{580b6b50-f7c4-4191-9543-c21d0bdabacf}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_fbx_loader\wbp_fbx_loader.vcxproj">
       <Project>{7b83c86d-786b-4217-be75-81ce2cdce58e}</Project>
     </ProjectReference>
     <ProjectReference Include="..\wbp_identity\wbp_identity.vcxproj">
       <Project>{da63da4a-8cf7-4528-8224-7298bb13e8dd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\wbp_model\wbp_model.vcxproj">
+      <Project>{7482efb4-54bb-49a8-a903-34bfacf3feb2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\wbp_transform\wbp_transform.vcxproj">
       <Project>{bc69514a-7533-45f3-982c-0f561b8e83ae}</Project>
