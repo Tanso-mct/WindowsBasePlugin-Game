@@ -17,6 +17,9 @@
 #include "wbp_collision/plugin.h"
 #pragma comment(lib, "wbp_collision.lib")
 
+#include "wbp_physics/plugin.h"
+#pragma comment(lib, "wbp_physics.lib")
+
 using namespace DirectX;
 
 void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCont, wb::SystemArgument &args)
@@ -166,6 +169,17 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
     systemCont.Get(example::ControllerSystemID()).Update(args);
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
     systemCont.Get(wbp_collision::CollisionSystemID()).Update(args);
+    systemCont.Get(wbp_render::RenderSystemID()).Update(args);
+
+#elif defined(EXAMPLE_MODE_PHYSICS)
+
+    systemCont.Get(example::ControllerSystemID()).Update(args);
+    systemCont.Get(wbp_physics::RigidBodySystemID()).Update(args);
+    systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
+
+    systemCont.Get(wbp_collision::CollisionSystemID()).Update(args);
+    systemCont.Get(wbp_physics::RigidBodyResponseSystemID()).Update(args);
+
     systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
 #endif

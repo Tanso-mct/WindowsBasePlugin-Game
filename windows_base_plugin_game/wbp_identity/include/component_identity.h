@@ -39,7 +39,7 @@ namespace wbp_identity
         const size_t &GetLayer() const override { return layer_; }
         void SetLayer(const size_t &layer) override { layer_ = layer; }
 
-        const bool &IsActiveSelf() const override { return activeSelf_; }
+        bool IsActiveSelf() const override { return activeSelf_; }
         void SetActiveSelf(bool active) override { activeSelf_ = active; }
     };
 

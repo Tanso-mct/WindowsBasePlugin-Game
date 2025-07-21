@@ -10,8 +10,8 @@ namespace wbp_physics
     public:
         virtual ~IRigidBodyComponent() = default;
 
-        virtual const bool &IsKinematic() const = 0;
-        virtual void SetKinematic(const bool &kinematic) = 0;
+        virtual bool IsKinematic() const = 0;
+        virtual void SetKinematic(bool kinematic) = 0;
 
         virtual const DirectX::XMFLOAT3 &GetInitialPos() = 0;
         virtual void SetInitialPos(const DirectX::XMFLOAT3 &pos) = 0;

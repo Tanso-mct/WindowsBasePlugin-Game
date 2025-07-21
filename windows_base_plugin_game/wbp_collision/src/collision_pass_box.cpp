@@ -167,7 +167,11 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
                     );
 
                     // Add collision result
-                    runnerCollisionResult->AddCollided(receiverEntity->GetID().Clone(), collidedFaceNormal);
+                    runnerCollisionResult->AddCollided
+                    (
+                        receiverEntity->GetID().Clone(), 
+                        collidedFaceNormal, receiverBoxCollider->IsTrigger()
+                    );
                 }
             }
         }

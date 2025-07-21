@@ -54,9 +54,31 @@ const DirectX::XMFLOAT3 &wbp_collision::CollisionResultComponent::GetCollidedFac
     return collidedFaceNormals_[index];
 }
 
+bool wbp_collision::CollisionResultComponent::GetCollidedIsTrigger(size_t index) const
+{
+    if (index >= collidedIsTriggers_.size())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {
+                "Index out of range.",
+                "Requested index: " + std::to_string(index),
+                "Collided count: " + std::to_string(collidedIsTriggers_.size())
+            }
+        );
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WBP_COLLISION", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    return collidedIsTriggers_[index];
+}
+
 void wbp_collision::CollisionResultComponent::AddCollided
 (
-    std::unique_ptr<wb::IOptionalValue> entityID, const DirectX::XMFLOAT3 &normal
+    std::unique_ptr<wb::IOptionalValue> entityID, 
+    const DirectX::XMFLOAT3 &normal, bool isTrigger
 ){
     if (entityID == nullptr || !entityID->IsValid())
     {
@@ -74,12 +96,14 @@ void wbp_collision::CollisionResultComponent::AddCollided
 
     collidedEntityIDs_.emplace_back(std::move(entityID));
     collidedFaceNormals_.emplace_back(normal);
+    collidedIsTriggers_.emplace_back(isTrigger);
 }
 
 void wbp_collision::CollisionResultComponent::ClearCollided()
 {
     collidedEntityIDs_.clear();
     collidedFaceNormals_.clear();
+    collidedIsTriggers_.clear();
 }
 
 namespace wbp_collision

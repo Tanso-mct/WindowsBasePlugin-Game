@@ -31,8 +31,8 @@ namespace wbp_physics
          * IRigidBodyComponent implementation
         /**************************************************************************************************************/
 
-        const bool &IsKinematic() const override { return kinematic_; }
-        void SetKinematic(const bool &kinematic) override { kinematic_ = kinematic; }
+        bool IsKinematic() const override { return kinematic_; }
+        void SetKinematic(bool kinematic) override { kinematic_ = kinematic; }
 
         const DirectX::XMFLOAT3 &GetInitialPos() override { return initialPos_; }
         void SetInitialPos(const DirectX::XMFLOAT3 &pos) override { initialPos_ = pos; }
