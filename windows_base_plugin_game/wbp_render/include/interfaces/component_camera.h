@@ -6,7 +6,7 @@ namespace wbp_render
     class ICameraComponent : public wb::IComponent
     {
     public:
-        virtual ~ICameraComponent() = default;
+        virtual ~ICameraComponent() override = default;
 
         virtual const float &GetFieldOfView() const = 0;
         virtual void SetFieldOfView(float fov) = 0;

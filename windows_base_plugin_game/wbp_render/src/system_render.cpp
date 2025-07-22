@@ -5,6 +5,7 @@
 #include "wbp_render/include/component_mesh_renderer.h"
 
 #include "wbp_render/include/render_pass_model_forward.h"
+#include "wbp_render/include/render_pass_sprite_forward.h"
 
 #include <DirectXMath.h>
 using namespace DirectX;
@@ -64,6 +65,7 @@ void wbp_render::RenderSystem::Initialize(wb::IAssetContainer &assetContainer)
     // Set render passes. The order of addition to vector is the order of execution.
     passes_.clear();
     passes_.emplace_back(std::make_unique<ModelForwardRenderPass>());
+    passes_.emplace_back(std::make_unique<SpriteForwardRenderPass>());
 }
 
 void wbp_render::RenderSystem::Update(const wb::SystemArgument &args)

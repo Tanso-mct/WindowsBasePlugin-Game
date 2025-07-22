@@ -8,8 +8,7 @@ namespace wbp_render
     class IMeshRendererComponent : public wb::IComponent
     {
     public:
-        IMeshRendererComponent() = default;
-        ~IMeshRendererComponent() override = default;
+        virtual ~IMeshRendererComponent() override = default;
 
         virtual const size_t &GetModelAssetID() const = 0;
         virtual void SetModelAssetID(const size_t &modelAssetID) = 0;
