@@ -47,16 +47,6 @@ namespace
 
 } // namespace
 
-wbp_primitive::PrimitivePoint::PrimitivePoint()
-{
-    position_ = XMFLOAT3(0.0f, 0.0f, 0.0f);
-}
-
-wbp_primitive::PrimitivePoint::PrimitivePoint(const XMFLOAT3 &position)
-{
-    position_ = position;
-}
-
 wbp_primitive::PrimitiveAABB::PrimitiveAABB()
 {
     min_ = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -123,7 +113,7 @@ void wbp_primitive::PrimitiveAABB::SetSize(const DirectX::XMFLOAT3 &size)
 wbp_primitive::PrimitiveRay::PrimitiveRay()
 {
     origin_ = XMFLOAT3(0.0f, 0.0f, 0.0f);
-    direction_ = INITIAL_DIR;
+    direction_ = DEFAULT_DIR;
 }
 
 wbp_primitive::PrimitiveRay::PrimitiveRay(const XMFLOAT3 &origin, const XMFLOAT3 &direction)

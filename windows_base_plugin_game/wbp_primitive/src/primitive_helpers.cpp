@@ -166,3 +166,69 @@ WBP_PRIMITIVE_API XMFLOAT3 wbp_primitive::GetCollidedFaceNormal
 
     return normal;
 }
+
+WBP_PRIMITIVE_API bool wbp_primitive::IntersectRayAABB
+(
+    const PrimitiveRay &ray, const PrimitiveAABB &aabb, 
+    float *tmin, float *tmax
+){
+    XMVECTOR rayOrigin = ray.GetOriginVec();
+    XMVECTOR rayDir = XMVector3Normalize(ray.GetDirectionVec());
+    float rayLength = ray.GetLength();
+
+    XMVECTOR boxMin = aabb.GetMinVec();
+    XMVECTOR boxMax = aabb.GetMaxVec();
+
+    float t0 = 0.0f;
+    float t1 = rayLength;
+
+    // Judgment by slab method in each axis
+    for (int i = 0; i < 3; ++i) 
+    {
+        float o = XMVectorGetByIndex(rayOrigin, i);
+        float d = XMVectorGetByIndex(rayDir, i);
+        float minB = XMVectorGetByIndex(boxMin, i);
+        float maxB = XMVectorGetByIndex(boxMax, i);
+
+        if (fabsf(d) < 1e-8f) 
+        {
+            // If the ray is parallel to the axial direction, it will not intersect if outside the range of AABB
+            if (o < minB || o > maxB)
+            {
+                // No intersection
+                return false;
+            }
+        } 
+        else 
+        {
+            float invD = 1.0f / d;
+            float tNear = (minB - o) * invD;
+            float tFar = (maxB - o) * invD;
+            if (tNear > tFar) std::swap(tNear, tFar);
+            t0 = tNear > t0 ? tNear : t0;
+            t1 = tFar < t1 ? tFar : t1;
+            if (t0 > t1)
+            {
+                // No intersection
+                return false;
+            }
+        }
+    }
+
+    if (t1 < 0.0f)
+    {
+        // Crossing only behind the ray
+        return false;
+    }
+
+    if (t0 > rayLength)
+    {
+        // The intersection point is beyond the ray length
+        return false;
+    }
+
+    if (tmin) *tmin = t0;
+    if (tmax) *tmax = t1;
+
+    return true;
+}

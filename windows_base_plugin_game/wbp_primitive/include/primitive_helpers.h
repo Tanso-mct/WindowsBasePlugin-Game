@@ -37,4 +37,10 @@ namespace wbp_primitive
         const DirectX::XMFLOAT3 &movement
     );
 
+    WBP_PRIMITIVE_API bool IntersectRayAABB
+    (
+        const PrimitiveRay& ray, const PrimitiveAABB& aabb, 
+        float* tmin = nullptr, float* tmax = nullptr
+    );
+
 } // namespace wbp_primitive

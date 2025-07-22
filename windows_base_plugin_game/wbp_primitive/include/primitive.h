@@ -7,7 +7,6 @@ namespace wbp_primitive
 {
     enum class PrimitiveType
     {
-        Point,
         Box,
         Ray,
         Size
@@ -19,31 +18,6 @@ namespace wbp_primitive
         virtual ~IPrimitive() = default;
         virtual PrimitiveType GetType() const = 0;
     };
-
-    class WBP_PRIMITIVE_API PrimitivePoint : public IPrimitive
-    {
-    private:
-        DirectX::XMFLOAT3 position_;
-
-    public:
-        PrimitivePoint();
-        PrimitivePoint(const DirectX::XMFLOAT3 &position);
-        virtual ~PrimitivePoint() = default;
-
-        /***************************************************************************************************************
-         * IPrimitive implementation
-        /**************************************************************************************************************/
-
-        virtual PrimitiveType GetType() const override { return PrimitiveType::Point; }
-
-        /***************************************************************************************************************
-         * PrimitivePoint specific methods
-        /**************************************************************************************************************/
-
-        const DirectX::XMFLOAT3 &GetPosition() const { return position_; }
-        void SetPosition(const DirectX::XMFLOAT3 &position) { position_ = position; }
-    };
-
 
     class WBP_PRIMITIVE_API PrimitiveAABB : public IPrimitive
     {
@@ -91,13 +65,15 @@ namespace wbp_primitive
         void SetSize(const DirectX::XMFLOAT3 &size);
     };
 
-    constexpr DirectX::XMFLOAT3 INITIAL_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+    constexpr DirectX::XMFLOAT3 DEFAULT_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+    constexpr float DEFAULT_LENGTH = 1.0f;
 
     class WBP_PRIMITIVE_API PrimitiveRay : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 origin_;
         DirectX::XMFLOAT3 direction_;
+        float length_ = DEFAULT_LENGTH;
 
     public:
         PrimitiveRay();
@@ -121,6 +97,9 @@ namespace wbp_primitive
         const DirectX::XMFLOAT3 &GetDirection() const { return direction_; }
         DirectX::XMVECTOR GetDirectionVec() const { return XMLoadFloat3(&direction_); }
         void SetDirection(const DirectX::XMFLOAT3 &direction);
+
+        const float &GetLength() const { return length_; }
+        void SetLength(float length) { length_ = length; }
     };
 
 
