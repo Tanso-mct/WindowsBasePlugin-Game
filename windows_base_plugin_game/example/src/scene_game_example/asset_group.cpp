@@ -10,6 +10,9 @@
 #include "wbp_collision/plugin.h"
 #pragma comment(lib, "wbp_collision.lib")
 
+#include "wbp_locator/plugin.h"
+#pragma comment(lib, "wbp_locator.lib")
+
 #if defined(EXAMPLE_MODE_FBX_LOADER)
 
 const size_t &example::MockAssetFactoryID()
@@ -107,6 +110,24 @@ namespace example
 
 } // namespace example
 
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+const size_t &example::CharacterLocatorAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+namespace example
+{
+    WB_REGISTER_ASSET
+    (
+        CharacterLocatorAssetID, wbp_locator::LocatorAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/character_locator.fbx"
+    );
+
+} // namespace example
+
 #endif
 
 
@@ -127,6 +148,10 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
     AddAssetID(example::CharacterColliderShapeAssetID());
     AddAssetID(example::FieldModelAssetID());
     AddAssetID(example::FieldColliderShapeAssetID());
+
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+    AddAssetID(example::CharacterLocatorAssetID());
 
 #endif
 }

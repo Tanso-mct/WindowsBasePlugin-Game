@@ -32,6 +32,10 @@ namespace example
     const size_t &FieldModelAssetID();
     const size_t &FieldColliderShapeAssetID();
 
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+    const size_t &CharacterLocatorAssetID();
+
 #endif
 
     class GameExampleAssetGroup : public wb::AssetGroup

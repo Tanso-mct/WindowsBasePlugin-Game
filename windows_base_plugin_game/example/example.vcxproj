@@ -185,6 +185,9 @@
     <ProjectReference Include="..\wbp_identity\wbp_identity.vcxproj">
       <Project>{da63da4a-8cf7-4528-8224-7298bb13e8dd}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\wbp_locator\wbp_locator.vcxproj">
+      <Project>{0cb763a2-bc50-42d8-9c35-0ac359bb2723}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_model\wbp_model.vcxproj">
       <Project>{7482efb4-54bb-49a8-a903-34bfacf3feb2}</Project>
     </ProjectReference>

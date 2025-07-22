@@ -182,5 +182,7 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 
     systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
+#elif defined(EXAMPLE_MODE_FBX_LOADER)
+
 #endif
 }

@@ -141,12 +141,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\asset_factory_locator.cpp" />
+    <ClCompile Include="src\component_locator.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\asset_factory_locator.h" />
+    <ClInclude Include="include\asset_locator.h" />
+    <ClInclude Include="include\component_locator.h" />
     <ClInclude Include="include\dll_config.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
@@ -155,6 +160,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_fbx_loader\wbp_fbx_loader.vcxproj">
+      <Project>{7b83c86d-786b-4217-be75-81ce2cdce58e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_transform\wbp_transform.vcxproj">
       <Project>{bc69514a-7533-45f3-982c-0f561b8e83ae}</Project>
     </ProjectReference>

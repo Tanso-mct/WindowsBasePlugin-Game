@@ -571,6 +571,21 @@ void example::GameExampleEntitiesFactory::Create
         wb::ConsoleLog(msg);
     }
 
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_locator]",
+            "This example demonstrates the Locator.",
+            "It provides a way to locate assets in the project.",
+            "You can see the loaded data to set break points in the debugger.",
+            "The file you need to set break points is 'wbp_locator/src/asset_factory_locator.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
 #else
     std::string msg = wb::CreateMessage
     ({
