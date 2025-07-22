@@ -29,12 +29,7 @@ void wbp_collision::CollisionPassRay::Execute(const wb::SystemArgument &args)
 
         wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
         wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);
-        if (collisionResult != nullptr)
-        {
-            // Clear previous collision results
-            collisionResult->ClearCollided();
-        }
-        else
+        if (collisionResult == nullptr)
         {
             // Skip if no collision result component
             continue;

@@ -193,7 +193,7 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
             wb::ThrowRuntimeError(err);
         }
 
-        #if defined(EXAMPLE_MODE_COLLISION)
+#if defined(EXAMPLE_MODE_COLLISION)
 
         wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
         wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);

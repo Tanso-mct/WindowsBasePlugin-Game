@@ -27,14 +27,6 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         wb::IEntity *entity = args.entityContainer_.PtrGet(*id);
         if (entity == nullptr) continue; // Skip if entity is null
 
-        wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
-        wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);
-        if (collisionResult != nullptr)
-        {
-            // Clear previous collision results
-            collisionResult->ClearCollided();
-        }
-
         wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), args.componentContainer_);
         wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
         if (identity == nullptr)
