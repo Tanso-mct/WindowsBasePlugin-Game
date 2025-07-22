@@ -112,6 +112,18 @@ namespace example
 
 #elif defined(EXAMPLE_MODE_LOCATOR)
 
+const size_t &example::CharacterModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::FieldModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
 const size_t &example::CharacterLocatorAssetID()
 {
     static size_t id = wb::IDFactory::CreateAssetID();
@@ -120,6 +132,18 @@ const size_t &example::CharacterLocatorAssetID()
 
 namespace example
 {
+    WB_REGISTER_ASSET
+    (
+        CharacterModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/character.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        FieldModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/field.fbx"
+    );
+
     WB_REGISTER_ASSET
     (
         CharacterLocatorAssetID, wbp_locator::LocatorAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
@@ -150,6 +174,9 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
     AddAssetID(example::FieldColliderShapeAssetID());
 
 #elif defined(EXAMPLE_MODE_LOCATOR)
+
+    AddAssetID(example::CharacterModelAssetID());
+    AddAssetID(example::FieldModelAssetID());
 
     AddAssetID(example::CharacterLocatorAssetID());
 

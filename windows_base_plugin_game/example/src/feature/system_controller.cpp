@@ -247,14 +247,7 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
         XMFLOAT3 convertedAxis;
         XMStoreFloat3(&convertedAxis, axisVec);
 
-#if defined(EXAMPLE_MODE_COLLISION)
-
-        if (convertedAxis.x != 0.0f || convertedAxis.y != 0.0f || convertedAxis.z != 0.0f)
-        {
-            transform->Translate(convertedAxis);
-        }
-
-#elif defined(EXAMPLE_MODE_PHYSICS)
+#if defined(EXAMPLE_MODE_PHYSICS)
 
         // Get the RigidBodyComponent
         wb::IComponent *rigidBodyComponent = entity->GetComponent(wbp_physics::RigidBodyComponentID(), args.componentContainer_);
@@ -276,7 +269,16 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
 
         rigidBody->SetVelocity(convertedAxis);
 
+#else
+
+        if (convertedAxis.x != 0.0f || convertedAxis.y != 0.0f || convertedAxis.z != 0.0f)
+        {
+            transform->Translate(convertedAxis);
+        }
+
 #endif
+
+
 
         // Rotate camera using mouse movement
         if (mouseMonitor->GetDeltaPositionX() != 0 || mouseMonitor->GetDeltaPositionY() != 0)

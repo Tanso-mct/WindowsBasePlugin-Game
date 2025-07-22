@@ -147,12 +147,16 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\system_locator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\asset_factory_locator.h" />
     <ClInclude Include="include\asset_locator.h" />
     <ClInclude Include="include\component_locator.h" />
     <ClInclude Include="include\dll_config.h" />
+    <ClInclude Include="include\interfaces\asset_locator.h" />
+    <ClInclude Include="include\interfaces\component_locator.h" />
+    <ClInclude Include="include\system_locator.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
