@@ -20,6 +20,9 @@
 #include "wbp_physics/plugin.h"
 #pragma comment(lib, "wbp_physics.lib")
 
+#include "wbp_locator/plugin.h"
+#pragma comment(lib, "wbp_locator.lib")
+
 using namespace DirectX;
 
 void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCont, wb::SystemArgument &args)
@@ -182,5 +185,22 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 
     systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+    static bool isFirstUpdate = true;
+
+    if (isFirstUpdate)
+    {
+        systemCont.Get(wbp_locator::LocatorSystemID()).Update(args);
+        systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
+
+        isFirstUpdate = false;
+        return;
+    }
+    
+    systemCont.Get(example::ControllerSystemID()).Update(args);
+    systemCont.Get(wbp_transform::TransformSystemID()).Update(args);
+
+    systemCont.Get(wbp_render::RenderSystemID()).Update(args);
 #endif
 }

@@ -21,6 +21,9 @@
 #include "wbp_physics/plugin.h"
 #pragma comment(lib, "wbp_physics.lib")
 
+#include "wbp_locator/plugin.h"
+#pragma comment(lib, "wbp_locator.lib")
+
 void example::GameExampleEntitiesFactory::Create
 (
     wb::IAssetContainer &assetCont, 
@@ -569,6 +572,142 @@ void example::GameExampleEntitiesFactory::Create
             "The character model can move and collide with the field.",
         });
         wb::ConsoleLog(msg);
+    }
+
+#elif defined(EXAMPLE_MODE_LOCATOR)
+
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_locator]",
+            "This example demonstrates the Locator.",
+            "It provides a way to locate assets in the project.",
+            "You can see the loaded data to set break points in the debugger.",
+            "The file you need to set break points is 'wbp_locator/src/asset_factory_locator.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
+    // Create a controller entity
+    std::unique_ptr<wb::IOptionalValue> controllerEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        controllerEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(example::ControllerComponentID(), componentCont);
+        entity().AddComponent(wbp_locator::LocatorComponentID(), componentCont);
+    }
+
+    // Create a camera entity
+    std::unique_ptr<wb::IOptionalValue> cameraEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        cameraEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::CameraComponentID(), componentCont);
+    }
+
+    // Create a body entity
+    std::unique_ptr<wb::IOptionalValue> bodyEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        bodyEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::MeshRendererComponentID(), componentCont);
+    }
+
+    // Initialize the controller entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*controllerEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Controller");
+
+        wb::IComponent *controllerComponent = entity->GetComponent(example::ControllerComponentID(), componentCont);
+        example::IControllerComponent *controller = wb::As<example::IControllerComponent>(controllerComponent);
+        
+        controller->GetSpeed() = 600.0f;
+        controller->GetSensitivity() = 0.3f;
+
+        controller->SetBodyEntityID(bodyEntityID->Clone());
+        controller->SetCameraEntityID(cameraEntityID->Clone());
+
+        wb::IComponent *locatorComponent = entity->GetComponent(wbp_locator::LocatorComponentID(), componentCont);
+        wbp_locator::ILocatorComponent *locator = wb::As<wbp_locator::ILocatorComponent>(locatorComponent);
+        locator->SetLocatorAssetID(example::CharacterLocatorAssetID());
+
+        // Currently use locator asset, it enable to set 0 or 1.
+        locator->SetLocateTargetIndex(1);
+    }
+
+    // Initialize the camera entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*cameraEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Camera");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 110.0f, -260.0f));
+        transform->SetLocalRotation(DirectX::XMFLOAT3(30.0f, 0.0f, 0.0f)); // Look down at the body entity
+
+        transform->SetParent(entity, entityCont.PtrGet(*controllerEntityID), entityCont, componentCont);
+
+        wb::IComponent *cameraComponent = entity->GetComponent(wbp_render::CameraComponentID(), componentCont);
+        wbp_render::ICameraComponent *camera = wb::As<wbp_render::ICameraComponent>(cameraComponent);
+        camera->SetFarZ(100000.0f);
+    }
+
+    // Initialize the body entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*bodyEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Body");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetParent(entity, entityCont.PtrGet(*controllerEntityID), entityCont, componentCont);
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+        meshRenderer->SetModelAssetID(example::CharacterModelAssetID());
+    }
+
+    // Create a field entity
+    std::unique_ptr<wb::IOptionalValue> fieldEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        fieldEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::MeshRendererComponentID(), componentCont);
+    }
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*fieldEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Field");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+        meshRenderer->SetModelAssetID(example::FieldModelAssetID());
     }
 
 #else
