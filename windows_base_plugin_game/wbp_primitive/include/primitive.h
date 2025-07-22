@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include "wbp_collision/include/dll_config.h"
+#include "wbp_primitive/include/dll_config.h"
 
 #include <DirectXMath.h>
 
-namespace wbp_collision
+namespace wbp_primitive
 {
     enum class PrimitiveType
     {
@@ -13,14 +13,14 @@ namespace wbp_collision
         Size
     };
 
-    class WBP_COLLISION_API IPrimitive
+    class IPrimitive
     {
     public:
         virtual ~IPrimitive() = default;
         virtual PrimitiveType GetType() const = 0;
     };
 
-    class WBP_COLLISION_API PrimitivePoint : public IPrimitive
+    class WBP_PRIMITIVE_API PrimitivePoint : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 position_;
@@ -45,7 +45,7 @@ namespace wbp_collision
     };
 
 
-    class WBP_COLLISION_API PrimitiveAABB : public IPrimitive
+    class WBP_PRIMITIVE_API PrimitiveAABB : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 min_;
@@ -93,7 +93,7 @@ namespace wbp_collision
 
     constexpr DirectX::XMFLOAT3 INITIAL_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
 
-    class WBP_COLLISION_API PrimitiveRay : public IPrimitive
+    class WBP_PRIMITIVE_API PrimitiveRay : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 origin_;
@@ -125,4 +125,4 @@ namespace wbp_collision
 
 
 
-} // namespace wbp_collision
+} // namespace wbp_primitive

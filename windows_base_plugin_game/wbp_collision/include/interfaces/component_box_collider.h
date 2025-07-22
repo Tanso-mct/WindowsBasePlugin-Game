@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "windows_base/windows_base.h"
 
-#include "wbp_collision/include/primitive.h"
+#include "wbp_primitive/include/primitive.h"""
+#pragma comment(lib, "wbp_primitive.lib")
 
 #include <DirectXMath.h>
 
@@ -24,8 +25,8 @@ namespace wbp_collision
         virtual void SetColliderShapeAssetID(size_t colliderShapeAssetID) = 0;
 
         virtual size_t GetAABBCount(wb::IAssetContainer &assetContainer) const = 0;
-        virtual const std::vector<PrimitiveAABB> &GetAABBs(wb::IAssetContainer &assetContainer) const = 0;
-        virtual const PrimitiveAABB &GetAABB(size_t index, wb::IAssetContainer &assetContainer) const = 0;
+        virtual const std::vector<wbp_primitive::PrimitiveAABB> &GetAABBs(wb::IAssetContainer &assetContainer) const = 0;
+        virtual const wbp_primitive::PrimitiveAABB &GetAABB(size_t index, wb::IAssetContainer &assetContainer) const = 0;
     };
 
 } // namespace wbp_collision

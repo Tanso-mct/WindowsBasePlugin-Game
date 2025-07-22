@@ -149,8 +149,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\primitive.cpp" />
-    <ClCompile Include="src\primitive_helpers.cpp" />
     <ClCompile Include="src\system_collision.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,8 +162,6 @@
     <ClInclude Include="include\interfaces\colllision_pass.h" />
     <ClInclude Include="include\interfaces\component_box_collider.h" />
     <ClInclude Include="include\interfaces\component_collision_result.h" />
-    <ClInclude Include="include\primitive.h" />
-    <ClInclude Include="include\primitive_helpers.h" />
     <ClInclude Include="include\system_collision.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />

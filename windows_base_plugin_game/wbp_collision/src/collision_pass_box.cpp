@@ -4,7 +4,8 @@
 #include "wbp_collision/include/component_collision_result.h"
 #include "wbp_collision/include/component_box_collider.h"
 
-#include "wbp_collision/include/primitive_helpers.h"
+#include "wbp_primitive/include/primitive_helpers.h"
+#pragma comment(lib, "wbp_primitive.lib")
 
 #include <DirectXMath.h>
 using namespace DirectX;
@@ -107,7 +108,7 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         wbp_transform::ITransformComponent *runnerTransform = wb::As<wbp_transform::ITransformComponent>(runnerTransformComponent);
 
         // Create total AABB from the runner's box collider
-        wbp_collision::PrimitiveAABB totalAABB = wbp_collision::CreateAABBFromAABBs
+        wbp_primitive::PrimitiveAABB totalAABB = wbp_primitive::CreateAABBFromAABBs
         (
             runnerBoxCollider->GetAABBs(assetContainer), runnerTransform->GetWorldMatrixWithoutRot()
         );
@@ -121,7 +122,7 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         };
 
         // Create AABB from movement vector
-        wbp_collision::PrimitiveAABB movementAABB = wbp_collision::CreateAABBFromAABBMovement
+        wbp_primitive::PrimitiveAABB movementAABB = wbp_primitive::CreateAABBFromAABBMovement
         (
             totalAABB, 
             runnerTransform->GetPreviousWorldMatrixWithoutRot(), 
@@ -143,9 +144,9 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
             wb::IComponent *receiverTransformComponent = receiverEntity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
             wbp_transform::ITransformComponent *receiverTransform = wb::As<wbp_transform::ITransformComponent>(receiverTransformComponent);
 
-            for (const PrimitiveAABB &receiverAABB : receiverBoxCollider->GetAABBs(assetContainer))
+            for (const wbp_primitive::PrimitiveAABB &receiverAABB : receiverBoxCollider->GetAABBs(assetContainer))
             {
-                bool isIntersected = wbp_collision::IntersectAABBs
+                bool isIntersected = wbp_primitive::IntersectAABBs
                 (
                     movementAABB, XMMatrixIdentity(),
                     receiverAABB, receiverTransform->GetWorldMatrixWithoutRot()
@@ -159,7 +160,7 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
 
                 if (runnerCollisionResult != nullptr)
                 {
-                    XMFLOAT3 collidedFaceNormal = wbp_collision::GetCollidedFaceNormal
+                    XMFLOAT3 collidedFaceNormal = wbp_primitive::GetCollidedFaceNormal
                     (
                         receiverAABB, receiverTransform->GetWorldMatrixWithoutRot(),
                         movementAABB, XMMatrixIdentity(),

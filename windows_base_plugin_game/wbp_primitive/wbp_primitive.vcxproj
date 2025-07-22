@@ -145,9 +145,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\primitive.cpp" />
+    <ClCompile Include="src\primitive_helpers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\dll_config.h" />
+    <ClInclude Include="include\primitive.h" />
+    <ClInclude Include="include\primitive_helpers.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>

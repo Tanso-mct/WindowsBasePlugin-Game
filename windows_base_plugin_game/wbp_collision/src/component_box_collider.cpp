@@ -37,7 +37,7 @@ size_t wbp_collision::BoxColliderComponent::GetAABBCount(wb::IAssetContainer &as
     return colliderShapeAsset->GetAABBs().size();
 }
 
-const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderComponent::GetAABBs
+const std::vector<wbp_primitive::PrimitiveAABB> &wbp_collision::BoxColliderComponent::GetAABBs
 (
     wb::IAssetContainer &assetContainer
 ) const
@@ -63,7 +63,7 @@ const std::vector<wbp_collision::PrimitiveAABB> &wbp_collision::BoxColliderCompo
     return colliderShapeAsset->GetAABBs();
 }
 
-const wbp_collision::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
+const wbp_primitive::PrimitiveAABB &wbp_collision::BoxColliderComponent::GetAABB
 (
     size_t index, wb::IAssetContainer &assetContainer
 ) const
