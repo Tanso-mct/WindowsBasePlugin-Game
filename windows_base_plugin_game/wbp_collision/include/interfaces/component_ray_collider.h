@@ -12,10 +12,13 @@ namespace wbp_collision
     public:
         virtual ~IRayColliderComponent() = default;
 
-        virtual const wbp_primitive::PrimitiveRay &GetRay() const = 0;
+        virtual wbp_primitive::PrimitiveRay &GetRay() = 0;
 
-        virtual void CastRay() = 0;
-        virtual void EnableContinuousRayCasting(bool enable) = 0;
+        virtual bool IsCast() const = 0;
+        virtual void SetCast(bool casted) = 0;
+
+        virtual bool IsCasting() const = 0;
+        virtual void SetCasting(bool casting) = 0;
     }; 
 
 } // namespace wbp_collision

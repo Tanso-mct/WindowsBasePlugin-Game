@@ -307,6 +307,7 @@ void example::GameExampleEntitiesFactory::Create
         entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
         entity().AddComponent(example::ControllerComponentID(), componentCont);
         entity().AddComponent(wbp_collision::BoxColliderComponentID(), componentCont);
+        entity().AddComponent(wbp_collision::RayColliderComponentID(), componentCont);
         entity().AddComponent(wbp_collision::CollisionResultComponentID(), componentCont);
     }
 

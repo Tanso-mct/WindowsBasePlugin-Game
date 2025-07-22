@@ -42,10 +42,13 @@ namespace wbp_collision
          * IRayColliderComponent implementation
         /**************************************************************************************************************/
 
-        const wbp_primitive::PrimitiveRay &GetRay() const override { return ray_; }
+        wbp_primitive::PrimitiveRay &GetRay() override { return ray_; }
 
-        void CastRay() override { casted_ = true; }
-        void EnableContinuousRayCasting(bool enable) override { casting_ = enable; }
+        bool IsCast() const override { return casted_; }
+        void SetCast(bool casted) override { casted_ = casted; }
+
+        bool IsCasting() const override { return casting_; }
+        void SetCasting(bool casting) override { casting_ = casting; }
 
     };
 

@@ -120,23 +120,6 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
             continue;
         }
 
-        if (keyboardMonitor != nullptr && keyboardMonitor->GetKey(wb::KeyCode::C))
-        {
-            wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
-            wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);
-            if (collisionResult != nullptr && collisionResult->IsCollided())
-            {
-                std::string msg = wb::CreateMessage
-                ({
-                    "Collided face normal : " + 
-                    std::to_string(collisionResult->GetCollidedFaceNormal(0).x) + ", " +
-                    std::to_string(collisionResult->GetCollidedFaceNormal(0).y) + ", " +
-                    std::to_string(collisionResult->GetCollidedFaceNormal(0).z)
-                });
-                wb::ConsoleLog(msg);
-            }
-        }
-
         wb::IComponent *controllerComponent = entity->GetComponent(example::ControllerComponentID(), args.componentContainer_);
         example::IControllerComponent *controller = wb::As<example::IControllerComponent>(controllerComponent);
 
@@ -209,6 +192,73 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
             wb::ErrorNotify("WBP_CONTROLLER", err);
             wb::ThrowRuntimeError(err);
         }
+
+        #if defined(EXAMPLE_MODE_COLLISION)
+
+        wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
+        wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);
+
+        if (keyboardMonitor != nullptr && keyboardMonitor->GetKey(wb::KeyCode::C))
+        {
+            if (collisionResult != nullptr && collisionResult->IsCollided())
+            {
+                std::string msg = wb::CreateMessage
+                ({
+                    "Collided face normal : " + 
+                    std::to_string(collisionResult->GetCollidedFaceNormal(0).x) + ", " +
+                    std::to_string(collisionResult->GetCollidedFaceNormal(0).y) + ", " +
+                    std::to_string(collisionResult->GetCollidedFaceNormal(0).z)
+                });
+                wb::ConsoleLog(msg);
+            }
+        }
+
+        if (keyboardMonitor != nullptr && keyboardMonitor->GetKey(wb::KeyCode::R))
+        {
+            if (keyboardMonitor->GetKeyDown(wb::KeyCode::R))
+            {
+                wb::IComponent *rayColliderComponent = entity->GetComponent(wbp_collision::RayColliderComponentID(), args.componentContainer_);
+                wbp_collision::IRayColliderComponent *rayCollider = wb::As<wbp_collision::IRayColliderComponent>(rayColliderComponent);
+                if (rayCollider == nullptr)
+                {
+                    std::string err = wb::CreateErrorMessage
+                    (
+                        __FILE__, __LINE__, __FUNCTION__,
+                        {
+                            "RayColliderComponent requires RayColliderComponent to be set.",
+                        }
+                    );
+                    wb::ConsoleLogErr(err);
+                    wb::ErrorNotify("WBP_CONTROLLER", err);
+                    wb::ThrowRuntimeError(err);
+                }
+
+                rayCollider->SetCast(true);
+
+                wbp_primitive::PrimitiveRay &ray = rayCollider->GetRay();
+                ray.SetOrigin(cameraTransform->GetPosition());
+
+                XMVECTOR cameraForward = cameraTransform->GetForward();
+                XMFLOAT3 cameraForwardFloat3;
+                XMStoreFloat3(&cameraForwardFloat3, cameraForward);
+                ray.SetDirection(cameraForwardFloat3);
+
+                ray.SetLength(100000.0f);
+            }
+
+            if (collisionResult != nullptr && collisionResult->IsCollided())
+            {
+                std::string msg = wb::CreateMessage
+                ({
+                    "Ray collided with " + std::to_string(collisionResult->GetCollidedCount()) + " entities.",
+                    "Min distance: " + std::to_string(collisionResult->GetMinDistance()),
+                    "Max distance: " + std::to_string(collisionResult->GetMaxDistance()),
+                });
+                wb::ConsoleLog(msg);
+            }
+        }
+
+#endif // defined(EXAMPLE_MODE_COLLISION)
 
         XMFLOAT3 axis(0.0f, 0.0f, 0.0f);
         float moveValue = controller->GetSpeed() * args.deltaTime_;

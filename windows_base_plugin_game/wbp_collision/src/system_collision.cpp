@@ -2,6 +2,7 @@
 #include "wbp_collision/include/system_collision.h"
 
 #include "wbp_collision/include/collision_pass_box.h"
+#include "wbp_collision/include/collision_pass_ray.h"
 
 const WBP_COLLISION_API size_t &wbp_collision::CollisionSystemID()
 {
@@ -14,6 +15,7 @@ wbp_collision::CollisionSystem::CollisionSystem()
     // Initialize collision passes. The order of addition to vector is the order of execution.
     passes_.clear();
     passes_.emplace_back(std::make_unique<wbp_collision::CollisionPassBox>());
+    passes_.emplace_back(std::make_unique<wbp_collision::CollisionPassRay>());
 }
 
 const size_t &wbp_collision::CollisionSystem::GetID() const
