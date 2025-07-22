@@ -14,7 +14,7 @@ namespace wbp_render
     {
     private:
         size_t texture2DAssetID_;
-        Microsoft::WRL::ComPtr<ID3D12Resource> worldMatBuffer_;
+        Microsoft::WRL::ComPtr<ID3D12Resource> uiBuffer_;
 
     public:
         SpriteRendererComponent();
@@ -33,7 +33,7 @@ namespace wbp_render
         const size_t &GetTexture2DAssetID() const override { return texture2DAssetID_; }
         void SetTexture2DAssetID(const size_t &texture2DAssetID) override { texture2DAssetID_ = texture2DAssetID; }
 
-        ID3D12Resource *GetWorldMatBuffer() override { return worldMatBuffer_.Get(); }
+        ID3D12Resource *GetUIBuffer() override { return uiBuffer_.Get(); }
     };
 
 } // namespace wbp_render

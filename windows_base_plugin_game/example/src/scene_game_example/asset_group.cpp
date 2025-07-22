@@ -53,12 +53,24 @@ const size_t &example::CharacterModelAssetID()
     return id;
 }
 
+const size_t &example::SpriteTextureAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
 namespace example
 {
     WB_REGISTER_ASSET
     (
         CharacterModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), 
         "../resources/example/character.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        SpriteTextureAssetID, wbp_texture::Texture2DAssetFactoryID(), wbp_png_loader::PNGFileLoaderID(),
+        "../resources/example/lena_std.png"
     );
 
 } // namespace example
@@ -212,6 +224,7 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
 #elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
     AddAssetID(example::CharacterModelAssetID());
+    AddAssetID(example::SpriteTextureAssetID());
 
 #elif defined(EXAMPLE_MODE_COLLISION) || defined(EXAMPLE_MODE_PHYSICS)
 

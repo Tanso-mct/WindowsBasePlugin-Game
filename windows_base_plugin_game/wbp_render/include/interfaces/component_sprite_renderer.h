@@ -13,7 +13,7 @@ namespace wbp_render
         virtual const size_t &GetTexture2DAssetID() const = 0;
         virtual void SetTexture2DAssetID(const size_t &texture2DAssetID) = 0;
 
-        virtual ID3D12Resource *GetWorldMatBuffer() = 0;
+        virtual ID3D12Resource *GetUIBuffer() = 0;
     };
 
 } // namespace wbp_render

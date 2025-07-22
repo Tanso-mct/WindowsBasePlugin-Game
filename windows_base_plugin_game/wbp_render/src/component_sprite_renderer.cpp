@@ -20,23 +20,23 @@ const size_t &wbp_render::SpriteRendererComponent::GetID() const
 
 wbp_render::SpriteRendererComponent::SpriteRendererComponent()
 {
-    // Get gpu context
-    wbp_d3d12::GPUContext &gpuContext = wbp_d3d12::GPUContext::GetInstance();
-    if (!gpuContext.IsCreated())
-    {
-        std::string err = wb::CreateErrorMessage
-        (
-            __FILE__, __LINE__, __FUNCTION__,
-            {
-                "GPU context is not created."
-            }
-        );
-        wb::ConsoleLogErr(err);
-        wb::ErrorNotify("WBP_RENDER", err);
-        wb::ThrowRuntimeError(err);
-    }
+    // // Get gpu context
+    // wbp_d3d12::GPUContext &gpuContext = wbp_d3d12::GPUContext::GetInstance();
+    // if (!gpuContext.IsCreated())
+    // {
+    //     std::string err = wb::CreateErrorMessage
+    //     (
+    //         __FILE__, __LINE__, __FUNCTION__,
+    //         {
+    //             "GPU context is not created."
+    //         }
+    //     );
+    //     wb::ConsoleLogErr(err);
+    //     wb::ErrorNotify("WBP_RENDER", err);
+    //     wb::ThrowRuntimeError(err);
+    // }
 
-    wbp_d3d12::CreateBuffer(gpuContext.GetDevice(), worldMatBuffer_, sizeof(XMMATRIX));
+    // wbp_d3d12::CreateBuffer(gpuContext.GetDevice(), worldMatBuffer_, sizeof(XMMATRIX));
 }
 
 namespace wbp_render

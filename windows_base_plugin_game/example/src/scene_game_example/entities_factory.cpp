@@ -254,7 +254,7 @@ void example::GameExampleEntitiesFactory::Create
         camera->SetFarZ(10000.0f);
     }
 
-    // Create basic humanoid model entity
+    // Create character model entity
     std::unique_ptr<wb::IOptionalValue> modelEntityID = nullptr;
     {
         wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
@@ -280,6 +280,34 @@ void example::GameExampleEntitiesFactory::Create
         wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
         wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
         meshRenderer->SetModelAssetID(example::CharacterModelAssetID());
+    }
+
+    // Create a sprite entity
+    std::unique_ptr<wb::IOptionalValue> spriteEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        spriteEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(wbp_render::SpriteRendererComponentID(), componentCont);
+    }
+
+    // Initialize the sprite entity
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*spriteEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Sprite");
+
+        wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), componentCont);
+        wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
+        transform->SetLocalPosition(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f));
+
+        wb::IComponent *spriteRendererComponent = entity->GetComponent(wbp_render::SpriteRendererComponentID(), componentCont);
+        wbp_render::ISpriteRendererComponent *spriteRenderer = wb::As<wbp_render::ISpriteRendererComponent>(spriteRendererComponent);
+        spriteRenderer->SetTexture2DAssetID(example::SpriteTextureAssetID());
     }
 
 

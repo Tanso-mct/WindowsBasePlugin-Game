@@ -24,6 +24,7 @@ namespace example
 #elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
     const size_t &CharacterModelAssetID();
+    const size_t &SpriteTextureAssetID();
 
 #elif defined(EXAMPLE_MODE_COLLISION) || defined(EXAMPLE_MODE_PHYSICS)
 

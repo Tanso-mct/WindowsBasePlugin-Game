@@ -4,10 +4,19 @@
 
 #include "wbp_render/include/interfaces/render_pass.h"
 
+#include "wbp_model/include/interfaces/asset_model.h"
+
 #include <wrl/client.h>
+#include <DirectXMath.h>
 
 namespace wbp_render
 {
+    struct SpriteVertex
+    {
+        DirectX::XMFLOAT3 pos;
+        DirectX::XMFLOAT2 uv;
+    };
+
     class SpriteForwardRenderPass : public IRenderPass
     {
     private:
@@ -17,9 +26,9 @@ namespace wbp_render
 
         std::vector<Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>> commandLists_;
 
-        const UINT ROOT_SIGNATURE_VIEW_MATRIX = 1;
-        const UINT ROOT_SIGNATURE_PROJECTION_MATRIX = 2;
-        const UINT ROOT_SIGNATURE_WORLD_MATRIX = 0;
+        const UINT ROOT_SIGNATURE_UI_BUFFER = 0;
+
+        wbp_model::MeshGPUData squareMeshData_;
 
     public:
         SpriteForwardRenderPass() = default;
