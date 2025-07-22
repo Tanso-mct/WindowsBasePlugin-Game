@@ -102,7 +102,7 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         // Create total AABB from the runner's box collider
         wbp_primitive::PrimitiveAABB totalAABB = wbp_primitive::CreateAABBFromAABBs
         (
-            runnerBoxCollider->GetAABBs(assetContainer), runnerTransform->GetWorldMatrixWithoutRot()
+            runnerBoxCollider->GetAABBs(assetContainer), XMMatrixIdentity()
         );
 
         // Create movement vector based on runnerTransform
@@ -118,7 +118,7 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
         (
             totalAABB, 
             runnerTransform->GetPreviousWorldMatrixWithoutRot(), 
-            XMMatrixIdentity()
+            runnerTransform->GetWorldMatrixWithoutRot()
         );
 
         for (const std::unique_ptr<wb::IOptionalValue> &id : (args.entityIDView_)(wbp_collision::BoxColliderComponentID()))
