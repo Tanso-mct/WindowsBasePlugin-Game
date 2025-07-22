@@ -6,7 +6,7 @@
 namespace example
 {
 
-#if defined(EXAMPLE_MODE_FBX_LOADER)
+#if defined(EXAMPLE_MODE_FBX_LOADER) || defined(EXAMPLE_MODE_PNG_LOADER)
 
     const size_t &MockAssetFactoryID();
 

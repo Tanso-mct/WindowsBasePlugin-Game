@@ -13,7 +13,10 @@
 #include "wbp_locator/plugin.h"
 #pragma comment(lib, "wbp_locator.lib")
 
-#if defined(EXAMPLE_MODE_FBX_LOADER)
+#include "wbp_png_loader/plugin.h"
+#pragma comment(lib, "wbp_png_loader.lib")
+
+#if defined(EXAMPLE_MODE_FBX_LOADER) 
 
 const size_t &example::MockAssetFactoryID()
 {
@@ -34,6 +37,7 @@ const size_t &example::MockAssetID()
 
 namespace example
 {
+    WB_REGISTER_ASSET_FACTORY(MockAssetFactoryID(), MockAssetFactory);
     WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(), "../resources/example/character.fbx");
 
 } // namespace example
@@ -152,13 +156,39 @@ namespace example
 
 } // namespace example
 
+#elif defined(EXAMPLE_MODE_PNG_LOADER) 
+
+const size_t &example::MockAssetFactoryID()
+{
+    static size_t id = wb::IDFactory::CreateAssetFactoryID();
+    return id;
+}
+
+std::unique_ptr<wb::IAsset> example::MockAssetFactory::Create(wb::IFileData &fileData) const
+{
+    return nullptr;
+}
+
+const size_t &example::MockAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+namespace example
+{
+    WB_REGISTER_ASSET_FACTORY(MockAssetFactoryID(), MockAssetFactory);
+    WB_REGISTER_ASSET(MockAssetID, MockAssetFactoryID(), wbp_png_loader::PNGFileLoaderID(), "../resources/example/lena_std.png");
+
+} // namespace example
+
 #endif
 
 
 
 example::GameExampleAssetGroup::GameExampleAssetGroup()
 {
-#if defined(EXAMPLE_MODE_FBX_LOADER)
+#if defined(EXAMPLE_MODE_FBX_LOADER) || defined(EXAMPLE_MODE_PNG_LOADER)
 
     AddAssetID(example::MockAssetID());
 

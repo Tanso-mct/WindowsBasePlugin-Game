@@ -194,6 +194,9 @@
     <ProjectReference Include="..\wbp_physics\wbp_physics.vcxproj">
       <Project>{61f7cbe4-c575-4141-bfff-1c7dd42619a3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\wbp_png_loader\wbp_png_loader.vcxproj">
+      <Project>{874eb485-ad5a-4497-952b-04d52935b0fb}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_render\wbp_render.vcxproj">
       <Project>{a5a68c10-2821-4e38-a557-724a2e7fa7fe}</Project>
     </ProjectReference>
