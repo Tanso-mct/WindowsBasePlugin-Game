@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_primitive", "wbp_primit
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_primitive_test", "wbp_primitive_test\wbp_primitive_test.vcxproj", "{60CC505A-7B74-42C5-8735-96E7ED58B4A4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "wbp_png_loader", "wbp_png_loader\wbp_png_loader.vcxproj", "{874EB485-AD5A-4497-952B-04D52935B0FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -141,6 +143,14 @@ Global
 		{60CC505A-7B74-42C5-8735-96E7ED58B4A4}.Release|x64.Build.0 = Release|x64
 		{60CC505A-7B74-42C5-8735-96E7ED58B4A4}.Release|x86.ActiveCfg = Release|Win32
 		{60CC505A-7B74-42C5-8735-96E7ED58B4A4}.Release|x86.Build.0 = Release|Win32
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Debug|x64.ActiveCfg = Debug|x64
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Debug|x64.Build.0 = Debug|x64
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Debug|x86.ActiveCfg = Debug|Win32
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Debug|x86.Build.0 = Debug|Win32
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Release|x64.ActiveCfg = Release|x64
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Release|x64.Build.0 = Release|x64
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Release|x86.ActiveCfg = Release|Win32
+		{874EB485-AD5A-4497-952B-04D52935B0FB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
