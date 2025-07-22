@@ -576,6 +576,19 @@ void example::GameExampleEntitiesFactory::Create
 
 #elif defined(EXAMPLE_MODE_LOCATOR)
 
+    // Output the explanation
+    {
+        std::string msg = wb::CreateMessage
+        ({
+            "[WindowsBasePlugin-Game : wbp_locator]",
+            "This example demonstrates the Locator.",
+            "It provides a way to locate assets in the project.",
+            "You can see the loaded data to set break points in the debugger.",
+            "The file you need to set break points is 'wbp_locator/src/asset_factory_locator.cpp'.",
+        });
+        wb::ConsoleLog(msg);
+    }
+
     // Create a controller entity
     std::unique_ptr<wb::IOptionalValue> controllerEntityID = nullptr;
     {
@@ -630,6 +643,9 @@ void example::GameExampleEntitiesFactory::Create
         wb::IComponent *locatorComponent = entity->GetComponent(wbp_locator::LocatorComponentID(), componentCont);
         wbp_locator::ILocatorComponent *locator = wb::As<wbp_locator::ILocatorComponent>(locatorComponent);
         locator->SetLocatorAssetID(example::CharacterLocatorAssetID());
+
+        // Currently use locator asset, it enable to set 0 or 1.
+        locator->SetLocateTargetIndex(1);
     }
 
     // Initialize the camera entity
@@ -692,19 +708,6 @@ void example::GameExampleEntitiesFactory::Create
         wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
         wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
         meshRenderer->SetModelAssetID(example::FieldModelAssetID());
-    }
-
-    // Output the explanation
-    {
-        std::string msg = wb::CreateMessage
-        ({
-            "[WindowsBasePlugin-Game : wbp_locator]",
-            "This example demonstrates the Locator.",
-            "It provides a way to locate assets in the project.",
-            "You can see the loaded data to set break points in the debugger.",
-            "The file you need to set break points is 'wbp_locator/src/asset_factory_locator.cpp'.",
-        });
-        wb::ConsoleLog(msg);
     }
 
 #else
