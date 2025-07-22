@@ -19,7 +19,7 @@ namespace example
         std::unique_ptr<wb::IAsset> Create(wb::IFileData &fileData) const override;
     };
 
-    const size_t &MockAssetID();
+    c
 
 #elif defined(EXAMPLE_MODE_MODEL) || defined(EXAMPLE_MODE_RENDER)
 
@@ -38,6 +38,10 @@ namespace example
     const size_t &FieldModelAssetID();
 
     const size_t &CharacterLocatorAssetID();
+
+#elif defined(EXAMPLE_MODE_TEXTURE)
+
+    const size_t &MockAssetID();
 
 #endif
 

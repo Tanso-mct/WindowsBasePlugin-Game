@@ -141,13 +141,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\asset_factory_texture_2d.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\asset_factory_texture_2d.h" />
+    <ClInclude Include="include\asset_texture_2d.h" />
     <ClInclude Include="include\dll_config.h" />
+    <ClInclude Include="include\interfaces\asset_texture_2d.h" />
     <ClInclude Include="plugin.h" />
     <ClInclude Include="src\pch.h" />
   </ItemGroup>
@@ -155,6 +159,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\wbp_d3d12\wbp_d3d12.vcxproj">
+      <Project>{580b6b50-f7c4-4191-9543-c21d0bdabacf}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\wbp_png_loader\wbp_png_loader.vcxproj">
       <Project>{874eb485-ad5a-4497-952b-04d52935b0fb}</Project>
     </ProjectReference>

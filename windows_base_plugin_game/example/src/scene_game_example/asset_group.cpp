@@ -16,6 +16,9 @@
 #include "wbp_png_loader/plugin.h"
 #pragma comment(lib, "wbp_png_loader.lib")
 
+#include "wbp_texture/plugin.h"
+#pragma comment(lib, "wbp_texture.lib")
+
 #if defined(EXAMPLE_MODE_FBX_LOADER) 
 
 const size_t &example::MockAssetFactoryID()
@@ -182,13 +185,27 @@ namespace example
 
 } // namespace example
 
+#elif defined(EXAMPLE_MODE_TEXTURE)
+
+const size_t &example::MockAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+namespace example
+{
+    WB_REGISTER_ASSET(MockAssetID, wbp_texture::Texture2DAssetFactoryID(), wbp_png_loader::PNGFileLoaderID(), "../resources/example/lena_std.png");
+
+} // namespace example
+
 #endif
 
 
 
 example::GameExampleAssetGroup::GameExampleAssetGroup()
 {
-#if defined(EXAMPLE_MODE_FBX_LOADER) || defined(EXAMPLE_MODE_PNG_LOADER)
+#if defined(EXAMPLE_MODE_FBX_LOADER) || defined(EXAMPLE_MODE_PNG_LOADER) || defined(EXAMPLE_MODE_TEXTURE)
 
     AddAssetID(example::MockAssetID());
 
