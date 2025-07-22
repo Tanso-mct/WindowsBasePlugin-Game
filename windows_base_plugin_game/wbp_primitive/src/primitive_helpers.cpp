@@ -1,11 +1,11 @@
-﻿#include "wbp_collision/src/pch.h"
-#include "wbp_collision/include/primitive_helpers.h"
+﻿#include "wbp_primitive/src/pch.h"
+#include "wbp_primitive/include/primitive_helpers.h"
 
 using namespace DirectX;
 
-WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABBs
+WBP_PRIMITIVE_API wbp_primitive::PrimitiveAABB wbp_primitive::CreateAABBFromAABBs
 (
-    const std::vector<wbp_collision::PrimitiveAABB> &aabbs, 
+    const std::vector<wbp_primitive::PrimitiveAABB> &aabbs, 
     const XMMATRIX &convertMat
 ){
     XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
@@ -30,10 +30,10 @@ WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABB
         if (XMVectorGetZ(transformedMax) > max.z) max.z = XMVectorGetZ(transformedMax);
     }
 
-    return wbp_collision::PrimitiveAABB(min, max);
+    return wbp_primitive::PrimitiveAABB(min, max);
 }
 
-WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromVec
+WBP_PRIMITIVE_API wbp_primitive::PrimitiveAABB wbp_primitive::CreateAABBFromVec
 (
     const DirectX::XMFLOAT3 &vec, const DirectX::XMFLOAT3 &origin
 ){
@@ -44,32 +44,32 @@ WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromVec
     XMStoreFloat3(&min, vecCenter - vecExtents);
     XMStoreFloat3(&max, vecCenter + vecExtents);
 
-    return wbp_collision::PrimitiveAABB(min, max);
+    return wbp_primitive::PrimitiveAABB(min, max);
 }
 
-WBP_COLLISION_API wbp_collision::PrimitiveAABB wbp_collision::CreateAABBFromAABBMovement
+WBP_PRIMITIVE_API wbp_primitive::PrimitiveAABB wbp_primitive::CreateAABBFromAABBMovement
 (
-    const wbp_collision::PrimitiveAABB &aabb,
+    const wbp_primitive::PrimitiveAABB &aabb,
     const DirectX::XMMATRIX &beforeMat, const DirectX::XMMATRIX &afterMat
 ){
     XMVECTOR beforeMin = XMVector3TransformCoord(aabb.GetMinVec(), beforeMat);
     XMVECTOR beforeMax = XMVector3TransformCoord(aabb.GetMaxVec(), beforeMat);
-    wbp_collision::PrimitiveAABB transformedAABB(beforeMin, beforeMax);
+    wbp_primitive::PrimitiveAABB transformedAABB(beforeMin, beforeMax);
 
     XMVECTOR afterMin = XMVector3TransformCoord(aabb.GetMinVec(), afterMat);
     XMVECTOR afterMax = XMVector3TransformCoord(aabb.GetMaxVec(), afterMat);
-    wbp_collision::PrimitiveAABB afterAABB(afterMin, afterMax);
+    wbp_primitive::PrimitiveAABB afterAABB(afterMin, afterMax);
 
-    return wbp_collision::CreateAABBFromAABBs
+    return wbp_primitive::CreateAABBFromAABBs
     (
         { transformedAABB, afterAABB }, DirectX::XMMatrixIdentity()
     );
 }
 
-WBP_COLLISION_API bool wbp_collision::IntersectAABBs
+WBP_PRIMITIVE_API bool wbp_primitive::IntersectAABBs
 (
-    const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
-    const wbp_collision::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat
+    const wbp_primitive::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
+    const wbp_primitive::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat
 ){    
     // Transform the AABBs using the conversion matrices
     XMVECTOR aabb1Min = XMVector3TransformCoord(aabb1.GetMinVec(), aabb1ConvertMat);
@@ -89,19 +89,19 @@ WBP_COLLISION_API bool wbp_collision::IntersectAABBs
     );
 }
 
-WBP_COLLISION_API XMFLOAT3 wbp_collision::GetCollidedFaceNormal
+WBP_PRIMITIVE_API XMFLOAT3 wbp_primitive::GetCollidedFaceNormal
 (
-    const wbp_collision::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
-    const wbp_collision::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat, 
+    const wbp_primitive::PrimitiveAABB &aabb1, const DirectX::XMMATRIX &aabb1ConvertMat, 
+    const wbp_primitive::PrimitiveAABB &aabb2, const DirectX::XMMATRIX &aabb2ConvertMat, 
     const XMFLOAT3 &movement
 ){
     XMVECTOR aabb1Min = XMVector3TransformCoord(aabb1.GetMinVec(), aabb1ConvertMat);
     XMVECTOR aabb1Max = XMVector3TransformCoord(aabb1.GetMaxVec(), aabb1ConvertMat);
-    wbp_collision::PrimitiveAABB transformedAABB1(aabb1Min, aabb1Max);
+    wbp_primitive::PrimitiveAABB transformedAABB1(aabb1Min, aabb1Max);
 
     XMVECTOR aabb2Min = XMVector3TransformCoord(aabb2.GetMinVec(), aabb2ConvertMat);
     XMVECTOR aabb2Max = XMVector3TransformCoord(aabb2.GetMaxVec(), aabb2ConvertMat);
-    wbp_collision::PrimitiveAABB transformedAABB2(aabb2Min, aabb2Max);
+    wbp_primitive::PrimitiveAABB transformedAABB2(aabb2Min, aabb2Max);
 
     // Get relative position of AABBs
     XMVECTOR relativePos = XMVectorSubtract(transformedAABB2.GetCenterVec(), transformedAABB1.GetCenterVec());
@@ -165,4 +165,70 @@ WBP_COLLISION_API XMFLOAT3 wbp_collision::GetCollidedFaceNormal
     }
 
     return normal;
+}
+
+WBP_PRIMITIVE_API bool wbp_primitive::IntersectRayAABB
+(
+    const PrimitiveRay &ray, const PrimitiveAABB &aabb, 
+    float *tmin, float *tmax
+){
+    XMVECTOR rayOrigin = ray.GetOriginVec();
+    XMVECTOR rayDir = XMVector3Normalize(ray.GetDirectionVec());
+    float rayLength = ray.GetLength();
+
+    XMVECTOR boxMin = aabb.GetMinVec();
+    XMVECTOR boxMax = aabb.GetMaxVec();
+
+    float t0 = 0.0f;
+    float t1 = rayLength;
+
+    // Judgment by slab method in each axis
+    for (int i = 0; i < 3; ++i) 
+    {
+        float o = XMVectorGetByIndex(rayOrigin, i);
+        float d = XMVectorGetByIndex(rayDir, i);
+        float minB = XMVectorGetByIndex(boxMin, i);
+        float maxB = XMVectorGetByIndex(boxMax, i);
+
+        if (fabsf(d) < 1e-8f) 
+        {
+            // If the ray is parallel to the axial direction, it will not intersect if outside the range of AABB
+            if (o < minB || o > maxB)
+            {
+                // No intersection
+                return false;
+            }
+        } 
+        else 
+        {
+            float invD = 1.0f / d;
+            float tNear = (minB - o) * invD;
+            float tFar = (maxB - o) * invD;
+            if (tNear > tFar) std::swap(tNear, tFar);
+            t0 = tNear > t0 ? tNear : t0;
+            t1 = tFar < t1 ? tFar : t1;
+            if (t0 > t1)
+            {
+                // No intersection
+                return false;
+            }
+        }
+    }
+
+    if (t1 < 0.0f)
+    {
+        // Crossing only behind the ray
+        return false;
+    }
+
+    if (t0 > rayLength)
+    {
+        // The intersection point is beyond the ray length
+        return false;
+    }
+
+    if (tmin) *tmin = t0;
+    if (tmax) *tmax = t1;
+
+    return true;
 }

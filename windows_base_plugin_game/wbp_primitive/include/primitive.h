@@ -1,51 +1,25 @@
 ﻿#pragma once
-#include "wbp_collision/include/dll_config.h"
+#include "wbp_primitive/include/dll_config.h"
 
 #include <DirectXMath.h>
 
-namespace wbp_collision
+namespace wbp_primitive
 {
     enum class PrimitiveType
     {
-        Point,
         Box,
         Ray,
         Size
     };
 
-    class WBP_COLLISION_API IPrimitive
+    class IPrimitive
     {
     public:
         virtual ~IPrimitive() = default;
         virtual PrimitiveType GetType() const = 0;
     };
 
-    class WBP_COLLISION_API PrimitivePoint : public IPrimitive
-    {
-    private:
-        DirectX::XMFLOAT3 position_;
-
-    public:
-        PrimitivePoint();
-        PrimitivePoint(const DirectX::XMFLOAT3 &position);
-        virtual ~PrimitivePoint() = default;
-
-        /***************************************************************************************************************
-         * IPrimitive implementation
-        /**************************************************************************************************************/
-
-        virtual PrimitiveType GetType() const override { return PrimitiveType::Point; }
-
-        /***************************************************************************************************************
-         * PrimitivePoint specific methods
-        /**************************************************************************************************************/
-
-        const DirectX::XMFLOAT3 &GetPosition() const { return position_; }
-        void SetPosition(const DirectX::XMFLOAT3 &position) { position_ = position; }
-    };
-
-
-    class WBP_COLLISION_API PrimitiveAABB : public IPrimitive
+    class WBP_PRIMITIVE_API PrimitiveAABB : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 min_;
@@ -91,13 +65,15 @@ namespace wbp_collision
         void SetSize(const DirectX::XMFLOAT3 &size);
     };
 
-    constexpr DirectX::XMFLOAT3 INITIAL_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+    constexpr DirectX::XMFLOAT3 DEFAULT_DIR = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
+    constexpr float DEFAULT_LENGTH = 1.0f;
 
-    class WBP_COLLISION_API PrimitiveRay : public IPrimitive
+    class WBP_PRIMITIVE_API PrimitiveRay : public IPrimitive
     {
     private:
         DirectX::XMFLOAT3 origin_;
         DirectX::XMFLOAT3 direction_;
+        float length_ = DEFAULT_LENGTH;
 
     public:
         PrimitiveRay();
@@ -121,8 +97,11 @@ namespace wbp_collision
         const DirectX::XMFLOAT3 &GetDirection() const { return direction_; }
         DirectX::XMVECTOR GetDirectionVec() const { return XMLoadFloat3(&direction_); }
         void SetDirection(const DirectX::XMFLOAT3 &direction);
+
+        const float &GetLength() const { return length_; }
+        void SetLength(float length) { length_ = length; }
     };
 
 
 
-} // namespace wbp_collision
+} // namespace wbp_primitive

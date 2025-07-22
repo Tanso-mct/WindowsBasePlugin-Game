@@ -10,8 +10,8 @@ namespace wbp_collision
     {
     private:
         std::vector<DirectX::XMFLOAT3> vertices_;
-        std::vector<PrimitiveAABB> aabbs_;
-        PrimitiveAABB totalAABB_;
+        std::vector<wbp_primitive::PrimitiveAABB> aabbs_;
+        wbp_primitive::PrimitiveAABB totalAABB_;
 
     public:
         ColliderShapeAsset() = default;
@@ -19,8 +19,8 @@ namespace wbp_collision
 
         std::vector<DirectX::XMFLOAT3> &GetVertices() override { return vertices_; }
 
-        std::vector<PrimitiveAABB> &GetAABBs() override { return aabbs_; }
-        PrimitiveAABB &GetTotalAABB() override { return totalAABB_; }
+        std::vector<wbp_primitive::PrimitiveAABB> &GetAABBs() override { return aabbs_; }
+        wbp_primitive::PrimitiveAABB &GetTotalAABB() override { return totalAABB_; }
     };
 
 } // namespace wbp_collision

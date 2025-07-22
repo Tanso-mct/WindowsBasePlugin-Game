@@ -69,7 +69,10 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "xtree": "cpp"
     },
     "cSpell.words": [
         "AABB",
