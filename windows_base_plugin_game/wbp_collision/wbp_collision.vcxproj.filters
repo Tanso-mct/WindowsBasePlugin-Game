@@ -36,6 +36,12 @@
     <ClCompile Include="src\collision_pass_box.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="src\collision_pass_ray.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\component_ray_collider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -73,6 +79,18 @@
       <Filter>ヘッダー ファイル\interfaces</Filter>
     </ClInclude>
     <ClInclude Include="include\collision_pass_box.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfaces\collider.h">
+      <Filter>ヘッダー ファイル\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interfaces\component_ray_collider.h">
+      <Filter>ヘッダー ファイル\interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="include\collision_pass_ray.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="include\component_ray_collider.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

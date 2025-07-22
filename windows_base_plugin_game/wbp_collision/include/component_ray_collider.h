@@ -2,33 +2,34 @@
 #include "wbp_collision/include/dll_config.h"
 #include "windows_base/windows_base.h"
 
-#include "wbp_collision/include/interfaces/component_box_collider.h"
+#include "wbp_collision/include/interfaces/component_ray_collider.h"
 
 namespace wbp_collision
 {
-    const WBP_COLLISION_API size_t &BoxColliderComponentID();
+    const WBP_COLLISION_API size_t &RayColliderComponentID();
 
-    constexpr size_t DEFAULT_BOX_SHAPE_ASSET_ID = 0;
-
-    class WBP_COLLISION_API BoxColliderComponent : public IBoxColliderComponent
+    class WBP_COLLISION_API RayColliderComponent : public IRayColliderComponent
     {
     private:
         bool collisionEnabled_ = DEFAULT_COLLISION_ENABLED;
         bool isTrigger_ = DEFAULT_IS_TRIGGER;
-        size_t colliderShapeAssetID_ = DEFAULT_BOX_SHAPE_ASSET_ID;
+
+        wbp_primitive::PrimitiveRay ray_;
+        bool casted_ = false;
+        bool casting_ = false;
 
     public:
-        BoxColliderComponent() = default;
-        ~BoxColliderComponent() override = default;
+        RayColliderComponent() = default;
+        ~RayColliderComponent() override = default;
 
         /***************************************************************************************************************
          * IComponent implementation
         /**************************************************************************************************************/
 
-        virtual const size_t &GetID() const override;
+        const size_t &GetID() const override;
 
         /***************************************************************************************************************
-         * IBoxColliderComponent implementation
+         * ICollider implementation
         /**************************************************************************************************************/
 
         void SetCollisionEnabled(bool enabled) override { collisionEnabled_ = enabled; }
@@ -37,11 +38,16 @@ namespace wbp_collision
         void SetTrigger(bool isTrigger) override { isTrigger_ = isTrigger; }
         bool IsTrigger() const override { return isTrigger_; }
 
-        void SetColliderShapeAssetID(size_t colliderShapeAssetID) override { colliderShapeAssetID_ = colliderShapeAssetID; }
+        /***************************************************************************************************************
+         * IRayColliderComponent implementation
+        /**************************************************************************************************************/
 
-        size_t GetAABBCount(wb::IAssetContainer &assetContainer) const override;
-        const std::vector<wbp_primitive::PrimitiveAABB> &GetAABBs(wb::IAssetContainer &assetContainer) const override;
-        const wbp_primitive::PrimitiveAABB &GetAABB(size_t index, wb::IAssetContainer &assetContainer) const override;
+        const wbp_primitive::PrimitiveRay &GetRay() const override { return ray_; }
+
+        void CastRay() override { casted_ = true; }
+        void EnableContinuousRayCasting(bool enable) override { casting_ = enable; }
+
     };
+
 
 } // namespace wbp_collision
