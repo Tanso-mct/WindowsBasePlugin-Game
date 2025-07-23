@@ -232,3 +232,22 @@ WBP_PRIMITIVE_API bool wbp_primitive::IntersectRayAABB
 
     return true;
 }
+
+WBP_PRIMITIVE_API wbp_primitive::PrimitiveAABB wbp_primitive::CreateAABBFromRay
+(
+    const PrimitiveRay &ray, const DirectX::XMMATRIX &convertMat
+){
+    XMVECTOR rayOrigin = ray.GetOriginVec();
+    XMVECTOR rayDir = ray.GetDirectionVec();
+    float rayLength = ray.GetLength();
+
+    // Calculate the end point of the ray
+    XMVECTOR endPoint = XMVectorAdd(rayOrigin, XMVectorScale(rayDir, rayLength));
+
+    // Create AABB from the start and end points
+    XMVECTOR aabbMin = XMVector3TransformCoord(XMVectorMin(rayOrigin, endPoint), convertMat);
+    XMVECTOR aabbMax = XMVector3TransformCoord(XMVectorMax(rayOrigin, endPoint), convertMat);
+    wbp_primitive::PrimitiveAABB transformedAABB(aabbMin, aabbMax);
+
+    return transformedAABB;
+}

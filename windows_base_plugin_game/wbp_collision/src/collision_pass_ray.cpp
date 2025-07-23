@@ -75,6 +75,9 @@ void wbp_collision::CollisionPassRay::Execute(const wb::SystemArgument &args)
         // Reset the cast flag
         rayCollider->SetCast(false);
 
+        // Create AABB from the ray
+        wbp_primitive::PrimitiveAABB rayAABB = wbp_primitive::CreateAABBFromRay(rayCollider->GetRay());
+
         for (const std::unique_ptr<wb::IOptionalValue> &id : (args.entityIDView_)(wbp_collision::BoxColliderComponentID()))
         {
             wb::IEntity *colliderEntity = args.entityContainer_.PtrGet(*id);
@@ -100,8 +103,41 @@ void wbp_collision::CollisionPassRay::Execute(const wb::SystemArgument &args)
             }
 
             const std::vector<wbp_primitive::PrimitiveAABB> &aabbs = boxCollider->GetAABBs(assetContainer);
+
+             // Create total AABB
+            wbp_primitive::PrimitiveAABB totalAABB = wbp_primitive::CreateAABBFromAABBs
+            (
+                aabbs, transform->GetWorldMatrixWithoutRot()
+            );
+
+            // Check if the ray's AABB intersects with the collider's total AABB
+            bool isIntersected = wbp_primitive::IntersectAABBs
+            (
+                rayAABB, XMMatrixIdentity(),
+                totalAABB, XMMatrixIdentity()
+            );
+
+            if (!isIntersected)
+            {
+                // Skip if AABBs do not intersect
+                continue;
+            }
+
             for (const wbp_primitive::PrimitiveAABB &aabb : aabbs)
             {
+                // Check if the ray's AABB intersects with the collider's AABB
+                bool isIntersected = wbp_primitive::IntersectAABBs
+                (
+                    rayAABB, XMMatrixIdentity(),
+                    aabb, transform->GetWorldMatrixWithoutRot()
+                );
+
+                if (!isIntersected)
+                {
+                    // Skip if AABBs do not intersect
+                    continue;
+                }
+
                 // Check if the ray intersects with the AABB
                 float tmin = 0.0f;
                 float tmax = 0.0f;

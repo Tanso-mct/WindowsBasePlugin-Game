@@ -243,7 +243,7 @@ void example::ControllerSystem::Update(const wb::SystemArgument &args)
                 XMStoreFloat3(&cameraForwardFloat3, cameraForward);
                 ray.SetDirection(cameraForwardFloat3);
 
-                ray.SetLength(100000.0f);
+                ray.SetLength(1000.0f);
             }
 
             if (collisionResult != nullptr && collisionResult->IsCollided())
