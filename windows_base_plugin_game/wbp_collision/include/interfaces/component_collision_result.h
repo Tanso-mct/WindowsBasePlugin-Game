@@ -15,6 +15,7 @@ namespace wbp_collision
 
         virtual const wb::IOptionalValue &GetCollidedEntityID(size_t index) const = 0;
         virtual bool GetCollidedIsTrigger(size_t index) const = 0;
+        virtual bool GetIsRunnerResult(size_t index) const = 0;
 
         virtual const DirectX::XMFLOAT3 &GetCollidedFaceNormal(size_t index) const = 0;
         virtual const std::vector<DirectX::XMFLOAT3> &GetCollidedPoints(size_t index) const = 0;
@@ -29,7 +30,7 @@ namespace wbp_collision
         virtual void AddCollided
         (
             std::unique_ptr<wb::IOptionalValue> entityID, 
-            const DirectX::XMFLOAT3 &normal, bool isTrigger
+            const DirectX::XMFLOAT3 &normal, bool isTrigger, bool isRunner = true
         ) = 0;
 
         virtual void AddCollided

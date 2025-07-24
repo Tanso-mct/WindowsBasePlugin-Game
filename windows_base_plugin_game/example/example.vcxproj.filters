@@ -72,6 +72,12 @@
     <ClCompile Include="src\feature\system_controller.cpp">
       <Filter>ソース ファイル\feature</Filter>
     </ClCompile>
+    <ClCompile Include="src\feature\component_move_cube.cpp">
+      <Filter>ソース ファイル\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="src\feature\system_move_cube.cpp">
+      <Filter>ソース ファイル\feature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pch.h">
@@ -111,6 +117,12 @@
       <Filter>ヘッダー ファイル\feature</Filter>
     </ClInclude>
     <ClInclude Include="include\feature\system_controller.h">
+      <Filter>ヘッダー ファイル\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\component_move_cube.h">
+      <Filter>ヘッダー ファイル\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="include\feature\system_move_cube.h">
       <Filter>ヘッダー ファイル\feature</Filter>
     </ClInclude>
   </ItemGroup>

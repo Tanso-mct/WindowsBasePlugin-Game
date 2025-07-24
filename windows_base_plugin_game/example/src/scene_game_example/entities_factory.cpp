@@ -5,6 +5,7 @@
 #include "example/include/scene_game_example/asset_group.h"
 
 #include "example/include/feature/component_controller.h"
+#include "example/include/feature/component_move_cube.h"
 
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
@@ -522,6 +523,7 @@ void example::GameExampleEntitiesFactory::Create
         wb::IComponent *rigidBodyComponent = entity->GetComponent(wbp_physics::RigidBodyComponentID(), componentCont);
         wbp_physics::IRigidBodyComponent *rigidBody = wb::As<wbp_physics::IRigidBodyComponent>(rigidBodyComponent);
         rigidBody->SetKinematic(true);
+        rigidBody->SetPriority(0.0f);
     }
 
     // Initialize the camera entity
@@ -589,6 +591,46 @@ void example::GameExampleEntitiesFactory::Create
         wb::IComponent *boxColliderComponent = entity->GetComponent(wbp_collision::BoxColliderComponentID(), componentCont);
         wbp_collision::IBoxColliderComponent *boxCollider = wb::As<wbp_collision::IBoxColliderComponent>(boxColliderComponent);
         boxCollider->SetColliderShapeAssetID(example::FieldColliderShapeAssetID());
+    }
+
+    // Create a move cube entity
+    std::unique_ptr<wb::IOptionalValue> moveCubeEntityID = nullptr;
+    {
+        wb::CreatingEntity entity = wb::CreateEntity(entityCont, entityIDView);
+        moveCubeEntityID = entity().GetID().Clone();
+
+        entity().AddComponent(wbp_identity::IdentityComponentID(), componentCont);
+        entity().AddComponent(wbp_transform::TransformComponentID(), componentCont);
+        entity().AddComponent(example::MoveCubeComponentID(), componentCont);
+        entity().AddComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        entity().AddComponent(wbp_collision::BoxColliderComponentID(), componentCont);
+        entity().AddComponent(wbp_collision::CollisionResultComponentID(), componentCont);
+        entity().AddComponent(wbp_physics::RigidBodyComponentID(), componentCont);
+    }
+    {
+        wb::IEntity *entity = entityCont.PtrGet(*moveCubeEntityID);
+
+        wb::IComponent *identityComponent = entity->GetComponent(wbp_identity::IdentityComponentID(), componentCont);
+        wbp_identity::IIdentityComponent *identity = wb::As<wbp_identity::IIdentityComponent>(identityComponent);
+        identity->SetName("Move Cube");
+
+        wb::IComponent *meshRendererComponent = entity->GetComponent(wbp_render::MeshRendererComponentID(), componentCont);
+        wbp_render::IMeshRendererComponent *meshRenderer = wb::As<wbp_render::IMeshRendererComponent>(meshRendererComponent);
+        meshRenderer->SetModelAssetID(example::MoveCubeModelAssetID());
+
+        wb::IComponent *boxColliderComponent = entity->GetComponent(wbp_collision::BoxColliderComponentID(), componentCont);
+        wbp_collision::IBoxColliderComponent *boxCollider = wb::As<wbp_collision::IBoxColliderComponent>(boxColliderComponent);
+        boxCollider->SetColliderShapeAssetID(example::MoveCubeColliderShapeAssetID());
+
+        wb::IComponent *rigidBodyComponent = entity->GetComponent(wbp_physics::RigidBodyComponentID(), componentCont);
+        wbp_physics::IRigidBodyComponent *rigidBody = wb::As<wbp_physics::IRigidBodyComponent>(rigidBodyComponent);
+        rigidBody->SetKinematic(true);
+        rigidBody->SetPriority(1);
+
+        wb::IComponent *moveCubeComponent = entity->GetComponent(example::MoveCubeComponentID(), componentCont);
+        example::IMoveCubeComponent *moveCube = wb::As<example::IMoveCubeComponent>(moveCubeComponent);
+        moveCube->GetSpeed() = 100.0f;
+
     }
 
     // Output the explanation

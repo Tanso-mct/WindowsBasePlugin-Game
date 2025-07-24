@@ -11,11 +11,15 @@ namespace wbp_physics
     class WBP_PHYSICS_API RigidBodyComponent : public IRigidBodyComponent
     {
     private:
+        bool affectedByOther_ = true;
         bool kinematic_ = false;
+        int priority_ = DEFAULT_RIGID_BODY_PRIORITY;
+
         DirectX::XMFLOAT3 initialPos_ = { 0.0f, 0.0f, 0.0f };
         DirectX::XMFLOAT3 terminalPos_ = { 0.0f, 0.0f, 0.0f };
 
         DirectX::XMFLOAT3 velocity_ = { 0.0f, 0.0f, 0.0f };
+        DirectX::XMFLOAT3 affectedVelocity_ = { 0.0f, 0.0f, 0.0f };
 
     public:
         RigidBodyComponent() = default;
@@ -31,8 +35,14 @@ namespace wbp_physics
          * IRigidBodyComponent implementation
         /**************************************************************************************************************/
 
+        bool IsAffectedByOther() const override { return affectedByOther_; }
+        void SetAffectedByOther(bool affected) override { affectedByOther_ = affected; }
+
         bool IsKinematic() const override { return kinematic_; }
         void SetKinematic(bool kinematic) override { kinematic_ = kinematic; }
+
+        int GetPriority() const override { return priority_; }
+        void SetPriority(int priority) override { priority_ = priority; }
 
         const DirectX::XMFLOAT3 &GetInitialPos() override { return initialPos_; }
         void SetInitialPos(const DirectX::XMFLOAT3 &pos) override { initialPos_ = pos; }
@@ -42,6 +52,9 @@ namespace wbp_physics
 
         const DirectX::XMFLOAT3 &GetVelocity() override { return velocity_; }
         void SetVelocity(const DirectX::XMFLOAT3 &velocity) override { velocity_ = velocity; }
+
+        const DirectX::XMFLOAT3 &GetAffectedVelocity() override { return affectedVelocity_; }
+        void SetAffectedVelocity(const DirectX::XMFLOAT3 &velocity) override { affectedVelocity_ = velocity; }
     };
 
 } // namespace wbp_physics

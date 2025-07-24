@@ -63,12 +63,6 @@ void wbp_physics::RigidBodySystem::Update(const wb::SystemArgument &args)
 
         if (rigidBody->IsKinematic())
         {
-            if (rigidBody->GetVelocity().x == 0.0f && rigidBody->GetVelocity().y == 0.0f && rigidBody->GetVelocity().z == 0.0f)
-            {
-                // Skip if velocity is zero
-                continue;
-            }
-
             wb::IComponent *transformComponent = entity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
             wbp_transform::ITransformComponent *transform = wb::As<wbp_transform::ITransformComponent>(transformComponent);
             if (transform == nullptr)
@@ -89,7 +83,7 @@ void wbp_physics::RigidBodySystem::Update(const wb::SystemArgument &args)
 
             // Get new local position based on velocity
             XMVECTOR newLocalPosVec 
-                = XMLoadFloat3(&transform->GetLocalPosition()) + XMLoadFloat3(&rigidBody->GetVelocity());
+                = XMLoadFloat3(&transform->GetLocalPosition()) + XMLoadFloat3(&rigidBody->GetVelocity()) + XMLoadFloat3(&rigidBody->GetAffectedVelocity());
 
             XMFLOAT3 newLocalPos;
             XMStoreFloat3(&newLocalPos, newLocalPosVec);
@@ -155,14 +149,14 @@ void wbp_physics::RigidBodyResponseSystem::Update(const wb::SystemArgument &args
         wb::IComponent *rigidBodyComponent = entity->GetComponent(wbp_physics::RigidBodyComponentID(), args.componentContainer_);
         wbp_physics::IRigidBodyComponent *rigidBody = wb::As<wbp_physics::IRigidBodyComponent>(rigidBodyComponent);
 
+        if (!rigidBody->IsAffectedByOther())
+        {
+            // Skip if not affected by other entities
+            continue;
+        }
+
         if (rigidBody->IsKinematic())
         {
-            if (rigidBody->GetVelocity().x == 0.0f && rigidBody->GetVelocity().y == 0.0f && rigidBody->GetVelocity().z == 0.0f)
-            {
-                // Skip if velocity is zero
-                continue;
-            }
-
             wb::IComponent *collisionResultComponent = entity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
             wbp_collision::ICollisionResultComponent *collisionResult = wb::As<wbp_collision::ICollisionResultComponent>(collisionResultComponent);
             if (collisionResult == nullptr)
@@ -178,7 +172,8 @@ void wbp_physics::RigidBodyResponseSystem::Update(const wb::SystemArgument &args
             }
 
             // Get movement vector from velocity
-            XMVECTOR movementVec = XMLoadFloat3(&rigidBody->GetVelocity());
+            XMVECTOR movementVec 
+                = XMLoadFloat3(&rigidBody->GetVelocity()) + XMLoadFloat3(&rigidBody->GetAffectedVelocity());
 
             for (size_t i = 0; i < collisionResult->GetCollidedCount(); ++i)
             {
@@ -195,13 +190,60 @@ void wbp_physics::RigidBodyResponseSystem::Update(const wb::SystemArgument &args
                     continue;
                 }
 
-                XMVECTOR collidedFaceNormalVec = XMLoadFloat3(&collisionResult->GetCollidedFaceNormal(i));
+                wb::IComponent *collidedRigidBodyComponent = collidedEntity->GetComponent(wbp_physics::RigidBodyComponentID(), args.componentContainer_);
+                wbp_physics::IRigidBodyComponent *collidedRigidBody = wb::As<wbp_physics::IRigidBodyComponent>(collidedRigidBodyComponent);
 
-                // Project movement vector onto the collided face normal
-                XMVECTOR projectedMovementVec = XMVector3Dot(movementVec, collidedFaceNormalVec) * collidedFaceNormalVec;
+                // Self is runner
+                if (collisionResult->GetIsRunnerResult(i))
+                {
+                    if (collidedRigidBody == nullptr)
+                    {
+                        // Project movement vector onto the collided face normal
+                        XMVECTOR collidedFaceNormalVec = XMLoadFloat3(&collisionResult->GetCollidedFaceNormal(i));
+                        XMVECTOR projectedMovementVec = XMVector3Dot(movementVec, collidedFaceNormalVec) * collidedFaceNormalVec;
 
-                // Calculate the response movement vector
-                movementVec -= projectedMovementVec;
+                        // Calculate the response movement vector
+                        movementVec -= projectedMovementVec;
+                    }
+                    else
+                    {
+                        int myPriority = rigidBody->GetPriority();
+                        int theirPriority = collidedRigidBody->GetPriority();
+
+                        if (myPriority < theirPriority)
+                        {
+                            // Project movement vector onto the collided face normal
+                            XMVECTOR collidedFaceNormalVec = XMLoadFloat3(&collisionResult->GetCollidedFaceNormal(i));
+                            XMVECTOR projectedMovementVec = XMVector3Dot(movementVec, collidedFaceNormalVec) * collidedFaceNormalVec;
+
+                            // Calculate the response movement vector
+                            movementVec -= projectedMovementVec;
+                        }
+                    }
+
+                    continue;
+                }
+
+                // Self is receiver
+                if (collidedRigidBody != nullptr)
+                {
+                    int myPriority = rigidBody->GetPriority();
+                    int theirPriority = collidedRigidBody->GetPriority();
+
+                    if (myPriority < theirPriority) 
+                    {
+                        // Self is pushed by the collided rigid body
+                        if 
+                        (
+                            collidedRigidBody->GetVelocity().x != 0.0f ||
+                            collidedRigidBody->GetVelocity().y != 0.0f ||
+                            collidedRigidBody->GetVelocity().z != 0.0f
+                        ){
+                            rigidBody->SetAffectedVelocity(collidedRigidBody->GetVelocity());
+                            movementVec += XMLoadFloat3(&collidedRigidBody->GetVelocity());
+                        }
+                    } 
+                }
             }
 
             // Get the corrected LocalPosition
@@ -230,6 +272,8 @@ void wbp_physics::RigidBodyResponseSystem::Update(const wb::SystemArgument &args
 
             // Update the terminal position
             rigidBody->SetTerminalPos(newLocalPos);
+
+            int a = 0; // Debug breakpoint
         }
     }
 }

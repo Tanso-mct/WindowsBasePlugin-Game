@@ -4,6 +4,7 @@
 #include "example/include/mode.h"
 
 #include "example/include/feature/system_controller.h"
+#include "example/include/feature/system_move_cube.h"
 
 #include "wbp_transform/plugin.h"
 #pragma comment(lib, "wbp_transform.lib")
@@ -176,6 +177,7 @@ void example::GameExampleSystemScheduler::Execute(wb::ISystemContainer &systemCo
 
 #elif defined(EXAMPLE_MODE_PHYSICS)
 
+    systemCont.Get(example::MoveCubeSystemID()).Update(args);
     systemCont.Get(example::ControllerSystemID()).Update(args);
     systemCont.Get(wbp_physics::RigidBodySystemID()).Update(args);
     systemCont.Get(wbp_transform::TransformSystemID()).Update(args);

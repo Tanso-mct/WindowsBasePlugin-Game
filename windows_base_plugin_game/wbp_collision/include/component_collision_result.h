@@ -13,6 +13,7 @@ namespace wbp_collision
     private:
         std::vector<std::unique_ptr<wb::IOptionalValue>> collidedEntityIDs_;
         std::vector<bool> collidedIsTriggers_;
+        std::vector<bool> isRunnerResult_;
 
         std::vector<DirectX::XMFLOAT3> collidedFaceNormals_;
 
@@ -47,6 +48,7 @@ namespace wbp_collision
 
         const wb::IOptionalValue &GetCollidedEntityID(size_t index) const override;
         bool GetCollidedIsTrigger(size_t index) const override;
+        bool GetIsRunnerResult(size_t index) const override;
 
         const DirectX::XMFLOAT3 &GetCollidedFaceNormal(size_t index) const override;
         const std::vector<DirectX::XMFLOAT3> &GetCollidedPoints(size_t index) const override;
@@ -61,7 +63,7 @@ namespace wbp_collision
         void AddCollided
         (
             std::unique_ptr<wb::IOptionalValue> entityID, 
-            const DirectX::XMFLOAT3 &normal, bool isTrigger
+            const DirectX::XMFLOAT3 &normal, bool isTrigger, bool isRunner
         ) override;
 
         void AddCollided

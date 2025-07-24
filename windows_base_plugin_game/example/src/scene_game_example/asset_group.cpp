@@ -101,6 +101,18 @@ const size_t &example::FieldColliderShapeAssetID()
     return id;
 }
 
+const size_t &example::MoveCubeModelAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
+const size_t &example::MoveCubeColliderShapeAssetID()
+{
+    static size_t id = wb::IDFactory::CreateAssetID();
+    return id;
+}
+
 namespace example
 {
     WB_REGISTER_ASSET
@@ -125,6 +137,18 @@ namespace example
     (
         FieldColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
         "../resources/example/field_collider_shape.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        MoveCubeModelAssetID, wbp_model::ModelAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/move_cube.fbx"
+    );
+
+    WB_REGISTER_ASSET
+    (
+        MoveCubeColliderShapeAssetID, wbp_collision::ColliderShapeAssetFactoryID(), wbp_fbx_loader::FBXFileLoaderID(),
+        "../resources/example/move_cube_collider_shape.fbx"
     );
 
 } // namespace example
@@ -232,6 +256,8 @@ example::GameExampleAssetGroup::GameExampleAssetGroup()
     AddAssetID(example::CharacterColliderShapeAssetID());
     AddAssetID(example::FieldModelAssetID());
     AddAssetID(example::FieldColliderShapeAssetID());
+    AddAssetID(example::MoveCubeModelAssetID());
+    AddAssetID(example::MoveCubeColliderShapeAssetID());
 
 #elif defined(EXAMPLE_MODE_LOCATOR)
 

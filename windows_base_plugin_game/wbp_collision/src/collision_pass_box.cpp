@@ -136,6 +136,9 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
             wb::IComponent *receiverTransformComponent = receiverEntity->GetComponent(wbp_transform::TransformComponentID(), args.componentContainer_);
             wbp_transform::ITransformComponent *receiverTransform = wb::As<wbp_transform::ITransformComponent>(receiverTransformComponent);
 
+            wb::IComponent *receiverCollisionResultComponent = receiverEntity->GetComponent(wbp_collision::CollisionResultComponentID(), args.componentContainer_);
+            wbp_collision::ICollisionResultComponent *receiverCollisionResult = wb::As<wbp_collision::ICollisionResultComponent>(receiverCollisionResultComponent);
+
             for (const wbp_primitive::PrimitiveAABB &receiverAABB : receiverBoxCollider->GetAABBs(assetContainer))
             {
                 bool isIntersected = wbp_primitive::IntersectAABBs
@@ -150,20 +153,35 @@ void wbp_collision::CollisionPassBox::Execute(const wb::SystemArgument &args)
                     continue;
                 }
 
+                XMFLOAT3 collidedFaceNormal = wbp_primitive::GetCollidedFaceNormal
+                (
+                    receiverAABB, receiverTransform->GetWorldMatrixWithoutRot(),
+                    movementAABB, XMMatrixIdentity(),
+                    movementVec
+                );
+
                 if (runnerCollisionResult != nullptr)
                 {
-                    XMFLOAT3 collidedFaceNormal = wbp_primitive::GetCollidedFaceNormal
-                    (
-                        receiverAABB, receiverTransform->GetWorldMatrixWithoutRot(),
-                        movementAABB, XMMatrixIdentity(),
-                        movementVec
-                    );
-
                     // Add collision result
                     runnerCollisionResult->AddCollided
                     (
                         receiverEntity->GetID().Clone(), 
                         collidedFaceNormal, receiverBoxCollider->IsTrigger()
+                    );
+                }
+
+                if (receiverCollisionResult != nullptr)
+                {
+                    // Invert normal for receiver
+                    collidedFaceNormal.x *= -1.0f;
+                    collidedFaceNormal.y *= -1.0f;
+                    collidedFaceNormal.z *= -1.0f;
+
+                    // Add collision result
+                    receiverCollisionResult->AddCollided
+                    (
+                        runnerEntity->GetID().Clone(), 
+                        collidedFaceNormal, runnerBoxCollider->IsTrigger(), false
                     );
                 }
             }

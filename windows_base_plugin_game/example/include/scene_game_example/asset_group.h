@@ -32,6 +32,8 @@ namespace example
     const size_t &CharacterColliderShapeAssetID();
     const size_t &FieldModelAssetID();
     const size_t &FieldColliderShapeAssetID();
+    const size_t &MoveCubeModelAssetID();
+    const size_t &MoveCubeColliderShapeAssetID();
 
 #elif defined(EXAMPLE_MODE_LOCATOR)
 

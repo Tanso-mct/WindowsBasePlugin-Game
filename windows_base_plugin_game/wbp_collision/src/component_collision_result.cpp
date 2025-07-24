@@ -54,6 +54,27 @@ bool wbp_collision::CollisionResultComponent::GetCollidedIsTrigger(size_t index)
     return collidedIsTriggers_[index];
 }
 
+bool wbp_collision::CollisionResultComponent::GetIsRunnerResult(size_t index) const
+{
+    if (index >= isRunnerResult_.size())
+    {
+        std::string err = wb::CreateErrorMessage
+        (
+            __FILE__, __LINE__, __FUNCTION__,
+            {
+                "Index out of range.",
+                "Requested index: " + std::to_string(index),
+                "Collided count: " + std::to_string(isRunnerResult_.size())
+            }
+        );
+        wb::ConsoleLogErr(err);
+        wb::ErrorNotify("WBP_COLLISION", err);
+        wb::ThrowRuntimeError(err);
+    }
+
+    return isRunnerResult_[index];
+}
+
 const DirectX::XMFLOAT3 &wbp_collision::CollisionResultComponent::GetCollidedFaceNormal(size_t index) const
 {
     if (index >= collidedFaceNormals_.size())
@@ -120,7 +141,7 @@ const std::vector<float> &wbp_collision::CollisionResultComponent::GetCollidedDi
 void wbp_collision::CollisionResultComponent::AddCollided
 (
     std::unique_ptr<wb::IOptionalValue> entityID, 
-    const DirectX::XMFLOAT3 &normal, bool isTrigger
+    const DirectX::XMFLOAT3 &normal, bool isTrigger, bool isRunner = true
 ){
     if (entityID == nullptr || !entityID->IsValid())
     {
@@ -139,6 +160,7 @@ void wbp_collision::CollisionResultComponent::AddCollided
     collidedEntityIDs_.emplace_back(std::move(entityID));
     collidedFaceNormals_.emplace_back(normal);
     collidedIsTriggers_.emplace_back(isTrigger);
+    isRunnerResult_.emplace_back(isRunner);
 }
 
 void wbp_collision::CollisionResultComponent::AddCollided
@@ -187,6 +209,7 @@ void wbp_collision::CollisionResultComponent::ClearCollided()
 {
     collidedEntityIDs_.clear();
     collidedIsTriggers_.clear();
+    isRunnerResult_.clear();
 
     collidedFaceNormals_.clear();
     collidedPoints_.clear();
